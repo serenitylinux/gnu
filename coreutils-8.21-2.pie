@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="coreutils"
+iteration="2"
+version="8.21"
+desc="The basic file, shell and text manipulation utilities of the GNU operating system"
+bdeps="glibc pam acl libcap openssl"
+deps="glibc pam acl libcap openssl"
+arch="any"
+flags=""
+ext="tar.xz"
+
+function configure() {
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib  
+#		--with-openssl 
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}
