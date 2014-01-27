@@ -1,0 +1,44 @@
+# vim: ft=sh
+name="glibc"
+iteration="1"
+version="2.18"
+desc="GNU Standard C Library"
+bdeps="linux-headers tzdata gcc"
+deps="linux-headers tzdata"
+arch="i368 x86_64"
+flags=""
+
+
+function configure() {
+	curl -k "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc" > locale-gen
+	# needs this to build with make 4.0
+	sed -r -i 's/(3..89..)/\1 | 4.*/' ./configure
+	mkdir ../build
+	cd ../build
+	./../${srcdir}/configure \
+		--prefix=/usr/ \
+		--disable-profile \
+		--libexecdir=/usr/lib/glibc \
+		--enable-obsolete-rpc \
+		--enable-bind-now \
+		--enable-stackguard-randomization  
+}
+
+function build() {
+	cd ../build
+	default
+}
+
+function installpkg() {
+	cd ../build
+	default
+	cd ../${srcdir}
+	install -D -m644 COPYING ${dest_dir}/usr/share/licenses/${name}-${version}/LICENSE
+	install -D -m755 locale-gen ${dest_dir}/usr/bin
+	install -d -m755 ${dest_dir}/etc
+	echo 'en_US.UTF-8 UTF-8' > ${dest_dir}/etc/locale.gen
+}
+
+function post_install() {
+	locale-gen
+}
