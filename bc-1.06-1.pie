@@ -3,13 +3,10 @@ name="bc"
 iteration="1"
 version="1.06"
 desc="An arbitrary precision calculator language"
-url="http://www.gnu.org/software/bc/"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
 bdeps="readline flex"
 deps="readline"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

@@ -3,13 +3,10 @@ name="readline"
 iteration="1"
 version="6.2"
 desc="GNU readline library"
-url="http://tiswww.case.edu/php/chet/readline/rltop.html"
-src="http://mirror.clarkson.edu/gnu/readline/readline-$version.tar.gz"
 bdeps="glibc ncurses"
 deps="glibc ncurses"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

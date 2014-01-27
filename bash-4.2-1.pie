@@ -3,13 +3,10 @@ name="bash"
 iteration="1"
 version="4.2"
 desc="The GNU Bourne Again shell"
-url="http://www.gnu.org/software/bash/bash.html"
-src="http://mirror.clarkson.edu/gnu/bash/bash-$version.tar.gz"
 bdeps="readline glibc"
 deps="readline glibc"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

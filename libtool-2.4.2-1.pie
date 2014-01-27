@@ -3,13 +3,10 @@ name="libtool"
 iteration="1"
 version="2.4.2"
 desc="A generic library support script"
-url="http://www.gnu.org/software/libtool"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
 bdeps="gcc"
 deps=""
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

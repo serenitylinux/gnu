@@ -3,13 +3,10 @@ name="ncurses"
 iteration="1"
 version="5.9"
 desc="System V Release 4.0 curses emulation library"
-url="http://www.gnu.org/software/ncurses/"
-src="http://mirror.clarkson.edu/gnu/ncurses/ncurses-$version.tar.gz"
 bdeps="glibc"
 deps="glibc"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

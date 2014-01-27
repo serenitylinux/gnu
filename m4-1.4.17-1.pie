@@ -3,13 +3,10 @@ name="m4"
 iteration="1"
 version="1.4.17"
 desc="The GNU macro processor"
-url="http://www.gnu.org/software/m4"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
 bdeps="glibc bash"
 deps="$bdeps"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

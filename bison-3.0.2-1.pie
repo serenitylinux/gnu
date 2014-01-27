@@ -3,13 +3,10 @@ name="bison"
 iteration="1"
 version="3.0.2"
 desc="The GNU general-purpose parser generator"
-url="http://www.gnu.org/software/bison/bison.html"
-src="http://mirror.clarkson.edu/gnu/bison/$name-$version.tar.xz"
-bdeps=""
+bdeps="glibc m4 bash"
 deps="glibc m4 bash"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

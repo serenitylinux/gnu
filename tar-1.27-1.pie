@@ -3,13 +3,10 @@ name="tar"
 iteration="1"
 version="1.27"
 desc="Utility used to store, backup, and transport files"
-url="http://www.gnu.org/software/tar/tar.html"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
 bdeps="glibc bash"
 deps="glibc bash"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

@@ -3,13 +3,10 @@ name="binutils"
 iteration="1"
 version="2.23.2"
 desc="Binutils"
-url="http://gnu.org"
-src="http://mirror.clarkson.edu/gnu/binutils/binutils-$version.tar.gz"
 bdeps=""
 deps=""
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 function configure() {
 	rm -fv etc/standards.info

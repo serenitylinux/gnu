@@ -3,13 +3,10 @@ name="gdb"
 iteration="1"
 version="7.6.2"
 desc="The GNU Debugger"
-url="http://www.gnu.org/software/gdb/"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.bz2"
 deps="ncurses expat"
 bdeps="$deps"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

@@ -3,13 +3,10 @@ name="coreutils"
 iteration="1"
 version="8.21"
 desc="The basic file, shell and text manipulation utilities of the GNU operating system"
-url="http://www.gnu.org/software/coreutils"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
 bdeps="glibc"
 deps="glibc"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

@@ -3,13 +3,10 @@ name="gettext"
 iteration="1"
 version="0.18.3.1"
 desc="GNU internationalization library"
-url="http://www.gnu.org/software/gettext/"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
 bdeps="glibc bash"
 deps="$bdeps"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

@@ -3,13 +3,10 @@ name="wget"
 iteration="1"
 version="1.15"
 desc="A network utility to retrieve files from the Web"
-url="http://www.gnu.org/software/wget/"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
 bdeps="pcre zlib util-linux libidn openssl"
 deps="pcre zlib util-linux libidn openssl"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 function configure() {
 	./configure --prefix=/usr --sysconfdir=/etc --without-ssl

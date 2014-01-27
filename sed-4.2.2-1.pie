@@ -3,13 +3,10 @@ name="sed"
 iteration="1"
 version="4.2.2"
 desc="GNU stream editor"
-url="http://www.gnu.org/software/sed"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
 bdeps="bash"
 deps="bash"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

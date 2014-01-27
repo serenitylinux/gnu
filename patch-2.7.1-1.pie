@@ -3,13 +3,10 @@ name="patch"
 iteration="1"
 version="2.7.1"
 desc="A utility to apply patch files to original sources"
-url="http://www.gnu.org/software/patch/patch.html"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
 bdeps="glibc"
 deps="glibc"
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {

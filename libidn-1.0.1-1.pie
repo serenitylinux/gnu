@@ -3,13 +3,10 @@ name="libidn"
 iteration="1"
 version="1.28"
 desc="Implementation of the Stringprep, Punycode and IDNA specifications"
-url="Implementation of the Stringprep, Punycode and IDNA specifications"
-src="http://ftp.gnu.org/gnu/${name}/${name}-${version}.tar.gz"
 bdeps=""
 deps=""
 arch="any"
 flags=""
-srcdir="$name-$version"
 
 
 function configure() {
