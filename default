@@ -1,0 +1,20 @@
+# vim: ft=sh
+
+function ine() {
+	declare -f $1 &> /dev/null
+	[ "$?" -ne "0" ]
+}
+function isset() {
+	[ -z "$(eval echo \$$1)" ]
+}
+
+function ine_v() {
+	if isset $1; then
+		eval $1="$2"
+	fi
+}
+
+ine_v ext "tar.gz"
+ine_v url "http://www.gnu.org/$name"
+ine_v src "http://mirror.clarkson.edu/gnu/$name/${name}-${version}.$ext"
+ine_v srcdir "$name-$version"
