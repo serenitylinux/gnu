@@ -1,0 +1,28 @@
+# vim: ft=sh
+name="autoconf"
+iteration="2"
+version="2.69"
+desc="A GNU tool for automatically configuring source code"
+bdeps="gawk m4 bash diffutils"
+deps="$bdeps"
+arch="any"
+flags=""
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	# license exception
+	install -Dm644 COPYING.EXCEPTION \
+	$dest_dir/usr/share/licenses/autoconf/COPYING.EXCEPTION
+
+	# conflict with bintuils
+	rm -f ${dest_dir}/usr/share/info/standards.info
+}
