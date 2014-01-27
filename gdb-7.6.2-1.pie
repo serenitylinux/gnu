@@ -1,0 +1,36 @@
+# vim: ft=sh
+name="gdb"
+iteration="1"
+version="7.6.2"
+desc="The GNU Debugger"
+url="http://www.gnu.org/software/gdb/"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.bz2"
+deps="ncurses expat"
+bdeps="$deps"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+  ./configure --prefix=/usr --disable-nls \
+    --with-system-readline \
+    --without-python \
+    --with-system-gdbinit=/etc/gdb/gdbinit
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	# install "custom" system gdbinit
+	install -dm755 $dest_dir/etc/gdb
+	touch $dest_dir/etc/gdb/gdbinit
+
+	# resolve conflicts with binutils
+	rm ${dest_dir}/usr/include/{ansidecl,bfd,bfdlink,dis-asm,symcat}.h
+	rm ${dest_dir}/usr/lib/{libbfd,libopcodes}.a
+	rm ${dest_dir}/usr/share/info/{bfd,configure,standards}.info
+}

@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="findutils"
+iteration="1"
+version="4.4.2"
+desc="GNU utilities to locate files"
+url="http://www.gnu.org/software/findutils"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
+bdeps="glibc bash"
+deps="glibc bash"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

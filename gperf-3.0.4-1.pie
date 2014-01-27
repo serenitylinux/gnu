@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="gperf"
+iteration="1"
+version="3.0.4"
+desc="Perfect hash function generator"
+url="http://www.gnu.org/software/gperf/"
+src="http://mirror.clarkson.edu/gnu/gperf/gperf-$version.tar.gz"
+bdeps="gcc"
+deps="gcc" #libs
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

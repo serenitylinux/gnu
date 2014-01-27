@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="gawk"
+iteration="1"
+version="4.1.0"
+desc="GNU version of awk"
+url="http://www.gnu.org/software/gawk/"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
+bdeps="glibc mpfr"
+deps="glibc mpfr"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	./configure --prefix=/usr --libexecdir=/usr/lib --without-libsigsegv
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

@@ -1,0 +1,28 @@
+# vim: ft=sh
+name="bc"
+iteration="1"
+version="1.06"
+desc="An arbitrary precision calculator language"
+url="http://www.gnu.org/software/bc/"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
+bdeps="readline flex"
+deps="readline"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	curl -k https://projects.archlinux.org/svntogit/packages.git/plain/trunk/build-fix.patch?h=packages/bc -o archlinux-patch.patch
+	patch -p1 -i "archlinux-patch.patch"
+	./configure --prefix=/usr --mandir=/usr/share/man \
+		--infodir=/usr/share/info --with-readline
+}
+
+function build() {
+	make LEX="flex -I" 
+}
+
+function installpkg() {
+	default
+}

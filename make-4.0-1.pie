@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="make"
+iteration="1"
+version="4.0"
+desc="GNU make utility to maintain groups of programs"
+url="http://www.gnu.org/software/make/"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.gz"
+bdeps="glibc bash"
+deps="glibc"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

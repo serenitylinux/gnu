@@ -1,0 +1,26 @@
+# vim: ft=sh
+name="gzip"
+iteration="1"
+version="1.6"
+desc="GNU compression utility"
+url="http://www.gnu.org/software/gzip/"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
+#less
+bdeps="glibc bash"
+deps="glibc bash"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

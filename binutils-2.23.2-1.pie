@@ -1,0 +1,32 @@
+#vim: ft=sh
+name="binutils"
+iteration="1"
+version="2.23.2"
+desc="Binutils"
+url="http://gnu.org"
+src="http://mirror.clarkson.edu/gnu/binutils/binutils-$version.tar.gz"
+bdeps=""
+deps=""
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+function configure() {
+	rm -fv etc/standards.info
+	sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
+	sed -i -e 's/@colophon/@@colophon/' \
+	-e 's/doc@cygnus.com/doc@@cygnus.com/' bfd/doc/bfd.texinfo
+	./configure --prefix=/usr --enable-shared
+}
+
+function build() {
+	MAKEFLAGS="$MAKEFLAGS tooldir=/usr"
+	default
+	cp include/libiberty.h /usr/include
+}
+
+function installpkg() {
+	MAKEFLAGS="$MAKEFLAGS tooldir=/usr"
+	default
+}
+

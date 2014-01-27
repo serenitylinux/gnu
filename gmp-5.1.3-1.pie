@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="gmp"
+iteration="1"
+version="5.1.3"
+desc="A free library for arbitrary precision arithmetic"
+url="http://gmplib.org/"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
+bdeps="m4"
+deps="m4"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

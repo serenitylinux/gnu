@@ -1,0 +1,28 @@
+# vim: ft=sh
+name="parted"
+iteration="1"
+version="3.1"
+desc="A program for modifying partitions"
+url="http://www.gnu.org/software/parted/parted.html"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
+bdeps="e2fsprogs"
+deps="$bdeps"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+  ./configure --prefix=/usr \
+              --disable-debug \
+              --disable-device-mapper \
+              --disable-rpath
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

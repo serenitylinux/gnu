@@ -1,0 +1,34 @@
+# vim: ft=sh
+name="bash"
+iteration="1"
+version="4.2"
+desc="The GNU Bourne Again shell"
+url="http://www.gnu.org/software/bash/bash.html"
+src="http://mirror.clarkson.edu/gnu/bash/bash-$version.tar.gz"
+bdeps="readline glibc"
+deps="readline glibc"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+  _bashconfig=(-DDEFAULT_PATH_VALUE=\'\"/usr/local/sbin:/usr/local/bin:/usr/bin\"\'
+               -DSTANDARD_UTILS_PATH=\'\"/usr/bin\"\'
+               -DSYS_BASHRC=\'\"/etc/bash.bashrc\"\'
+               -DSYS_BASH_LOGOUT=\'\"/etc/bash.bash_logout\"\')
+  export CFLAGS="${CFLAGS} ${_bashconfig[@]}"
+
+  ./configure --prefix=/usr --with-curses --enable-readline \
+    --without-bash-malloc --with-installed-readline
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	ln -s bash ${dest_dir}/usr/bin/sh
+	install -dm755 ${dest_dir}/etc/skel/
+}

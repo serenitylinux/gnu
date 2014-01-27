@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="grep"
+iteration="1"
+version="2.15"
+desc="A string search utility"
+url="http://www.gnu.org/software/grep/grep.html"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
+bdeps="glibc bash"
+deps="glibc bash"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	./configure --prefix=/usr --without-included-regex --disable-perl-regexp
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

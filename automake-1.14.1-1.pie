@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="automake"
+iteration="1"
+version="1.14.1"
+desc="A GNU tool for automatically creating Makefiles"
+url="http://www.gnu.org/software/automake"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
+bdeps="autoconf perl bash"
+deps="perl bash"
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}

@@ -1,0 +1,26 @@
+# vim: ft=sh
+name="libtool"
+iteration="1"
+version="2.4.2"
+desc="A generic library support script"
+url="http://www.gnu.org/software/libtool"
+src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
+bdeps="gcc"
+deps=""
+arch="any"
+flags=""
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	make DESTDIR=${dest_dir} install-binSCRIPTS install-man install-info install-data-local
+	rm -r ${dest_dir}/usr/share/libtool/libltdl/
+}
