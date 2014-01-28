@@ -1,0 +1,26 @@
+# vim: ft=sh
+name="libgcrypt"
+iteration="1"
+version="1.6.0"
+desc="General purpose cryptographic library based on the code from GnuPG"
+url="http://www.gnupg.org"
+src="ftp://ftp.gnupg.org/gcrypt/${name}/${name}-${version}.tar.bz2"
+bdeps="libgpg-error"
+deps="libgpg-error"
+arch="any"
+flags=""
+
+
+function configure() {
+	./configure --prefix=/usr \
+		--disable-static \
+		--disable-padlock-support
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}
