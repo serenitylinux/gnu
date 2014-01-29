@@ -1,0 +1,26 @@
+# vim: ft=sh
+name="gnutls"
+iteration="1"
+version="3.1.5"
+desc="A library which provides a secure layer of a reliable layer"
+#nettle
+#p11-kit
+#libtasn1
+deps="gcc readline zlib nettle"
+bdeps="$deps valgrind"
+arch="any"
+flags=""
+ext="tar.xz"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}
