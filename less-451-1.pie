@@ -1,0 +1,22 @@
+# vim: ft=sh
+name="less"
+iteration="1"
+version="451"
+desc="Program to view files"
+bdeps="ncurses pcre"
+deps="ncurses pcre"
+arch="any"
+flags=""
+
+
+function configure() {
+	./configure --prefix=/usr --sysconfdir=/etc --with-regex=pcre
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+}
