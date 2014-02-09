@@ -1,6 +1,6 @@
 #vim: ft=sh
 name="binutils"
-iteration="2"
+iteration="3"
 version="2.23.2"
 desc="Binutils"
 bdeps="glibc zlib"
@@ -15,6 +15,8 @@ function configure() {
 	-e 's/doc@cygnus.com/doc@@cygnus.com/' bfd/doc/bfd.texinfo
 	./configure \
 		--prefix=/usr \
+		--enable-threads \
+		--enable-plugins \
 		--enable-shared 
 }
 
