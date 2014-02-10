@@ -1,10 +1,10 @@
 # vim: ft=sh
 name="grub"
-iteration="1"
+iteration="2"
 version="2.00"
 desc="GNU GRand Unified Bootloader"
 bdeps="xz freetype2 gettext bison flex"
-deps="base xz gettext autogen"
+deps="base xz gettext"
 arch="any"
 flags=""
 
