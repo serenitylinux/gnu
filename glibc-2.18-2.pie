@@ -3,10 +3,10 @@ name="glibc"
 iteration="1"
 version="2.18"
 desc="GNU Standard C Library"
-bdeps="linux-headers tzdata gcc"
-deps="linux-headers tzdata"
-arch="i368 x86_64"
-flags=""
+bdeps=('linux-headers' 'tzdata' 'gcc')
+deps=('linux-headers' 'tzdata')
+arch=('i368' 'x86_64')
+flags=()
 
 
 function configure() {

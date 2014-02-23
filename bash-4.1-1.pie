@@ -3,10 +3,10 @@ name="bash"
 iteration="1"
 version="4.1"
 desc="The GNU Bourne Again shell"
-bdeps="readline glibc"
-deps="readline glibc"
-arch="any"
-flags=""
+bdeps=('readline' 'glibc')
+deps=('readline' 'glibc')
+arch=('any')
+flags=()
 
 
 function configure() {

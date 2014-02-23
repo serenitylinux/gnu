@@ -3,10 +3,10 @@ name="bison"
 iteration="1"
 version="3.0.2"
 desc="The GNU general-purpose parser generator"
-bdeps="glibc m4 bash"
-deps="glibc m4 bash"
-arch="any"
-flags=""
+bdeps=('glibc' 'm4' 'bash')
+deps=('glibc' 'm4' 'bash')
+arch=('any')
+flags=()
 
 
 function configure() {

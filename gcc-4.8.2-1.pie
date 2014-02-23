@@ -3,12 +3,12 @@ name="gcc"
 iteration="1"
 version="4.8.2"
 desc="Gnu Compiler Collection"
-bdeps="gmp mpfr libmpc diffutils"
-deps="gmp mpfr libmpc linux-headers binutils diffutils"
-arch="any"
-flags=""
+bdeps=('gmp' 'mpfr' 'libmpc' 'diffutils')
+deps=('gmp' 'mpfr' 'libmpc' 'linux-headers' 'binutils' 'diffutils')
+arch=('any')
+flags=()
 srcdir="$name-$version"
-src="http://mirror.clarkson.edu/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.gz"
+src=('http://mirror.clarkson.edu/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.gz')
 
 function configure() {
 	sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in

@@ -3,10 +3,10 @@ name="sed"
 iteration="1"
 version="4.2.2"
 desc="GNU stream editor"
-bdeps="bash"
-deps="bash"
-arch="any"
-flags=""
+bdeps=('bash')
+deps=('bash')
+arch=('any')
+flags=()
 
 
 function configure() {

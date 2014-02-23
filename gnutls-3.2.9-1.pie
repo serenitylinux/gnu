@@ -6,10 +6,10 @@ desc="A library which provides a secure layer of a reliable layer"
 #nettle
 #p11-kit
 #libtasn1
-deps="gcc readline zlib nettle"
-bdeps="$deps valgrind"
-arch="any"
-flags=""
+deps=('gcc' 'readline' 'zlib' 'nettle')
+bdeps=('gcc' 'readline' 'zlib' 'nettle' 'valgrind')
+arch=('any')
+flags=()
 ext="tar.xz"
 
 

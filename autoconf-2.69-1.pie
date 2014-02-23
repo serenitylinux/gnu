@@ -4,11 +4,11 @@ iteration="1"
 version="2.69"
 desc="A GNU tool for automatically configuring source code"
 url="http://www.gnu.org/software/autoconf"
-src="http://mirror.clarkson.edu/gnu/$name/$name-$version.tar.xz"
-bdeps="gawk m4 bash"
-deps="$bdeps"
-arch="any"
-flags=""
+src=('http://mirror.clarkson.edu/gnu/autoconf/autoconf-2.69.tar.xz')
+bdeps=('gawk' 'm4' 'bash')
+deps=('gawk' 'm4' 'bash')
+arch=('any')
+flags=()
 srcdir="$name-$version"
 
 

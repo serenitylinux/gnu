@@ -3,10 +3,10 @@ name="ncurses"
 iteration="1"
 version="5.9"
 desc="System V Release 4.0 curses emulation library"
-bdeps="glibc"
-deps="glibc"
-arch="any"
-flags=""
+bdeps=('glibc')
+deps=('glibc')
+arch=('any')
+flags=()
 
 
 function configure() {

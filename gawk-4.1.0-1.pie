@@ -3,10 +3,10 @@ name="gawk"
 iteration="1"
 version="4.1.0"
 desc="GNU version of awk"
-bdeps="bash glibc mpfr"
-deps="bash glibc mpfr"
-arch="any"
-flags=""
+bdeps=('bash' 'glibc' 'mpfr')
+deps=('bash' 'glibc' 'mpfr')
+arch=('any')
+flags=()
 
 
 function configure() {

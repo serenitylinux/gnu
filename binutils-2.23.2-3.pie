@@ -3,10 +3,10 @@ name="binutils"
 iteration="3"
 version="2.23.2"
 desc="Binutils"
-bdeps="glibc zlib"
-deps="glibc zlib"
-arch="any"
-flags=""
+bdeps=('glibc' 'zlib')
+deps=('glibc' 'zlib')
+arch=('any')
+flags=()
 
 function configure() {
 	rm -fv etc/standards.info

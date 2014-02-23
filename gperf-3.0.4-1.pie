@@ -3,10 +3,10 @@ name="gperf"
 iteration="1"
 version="3.0.4"
 desc="Perfect hash function generator"
-bdeps="gcc"
+bdeps=('gcc')
 deps="gcc" #libs
-arch="any"
-flags=""
+arch=('any')
+flags=()
 
 
 function configure() {

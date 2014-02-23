@@ -3,10 +3,10 @@ name="nettle"
 iteration="1"
 version="2.7.1"
 desc="A low level cryptographic api"
-bdeps="gmp"
-deps="gmp"
-arch="any"
-flags=""
+bdeps=('gmp')
+deps=('gmp')
+arch=('any')
+flags=()
 
 
 function configure() {

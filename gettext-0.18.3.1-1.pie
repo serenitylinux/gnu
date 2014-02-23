@@ -3,10 +3,10 @@ name="gettext"
 iteration="1"
 version="0.18.3.1"
 desc="GNU internationalization library"
-bdeps="glibc bash"
-deps="$bdeps"
-arch="any"
-flags=""
+bdeps=('glibc' 'bash')
+deps=('glibc' 'bash')
+arch=('any')
+flags=()
 
 
 function configure() {

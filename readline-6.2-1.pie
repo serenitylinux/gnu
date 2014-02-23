@@ -3,10 +3,10 @@ name="readline"
 iteration="1"
 version="6.2"
 desc="GNU readline library"
-bdeps="glibc ncurses"
-deps="glibc ncurses"
-arch="any"
-flags=""
+bdeps=('glibc' 'ncurses')
+deps=('glibc' 'ncurses')
+arch=('any')
+flags=()
 
 
 function configure() {

@@ -3,10 +3,10 @@ name="gdb"
 iteration="1"
 version="7.6.2"
 desc="The GNU Debugger"
-deps="ncurses expat"
-bdeps="$deps"
-arch="any"
-flags=""
+deps=('ncurses' 'expat')
+bdeps=('ncurses' 'expat')
+arch=('any')
+flags=()
 
 
 function configure() {

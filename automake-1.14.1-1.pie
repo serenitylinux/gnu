@@ -3,10 +3,10 @@ name="automake"
 iteration="1"
 version="1.14.1"
 desc="A GNU tool for automatically creating Makefiles"
-bdeps="autoconf perl bash"
-deps="perl bash"
-arch="any"
-flags=""
+bdeps=('autoconf' 'perl' 'bash')
+deps=('perl' 'bash')
+arch=('any')
+flags=()
 srcdir="$name-$version"
 
 

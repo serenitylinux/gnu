@@ -3,10 +3,10 @@ name="diffutils"
 iteration="1"
 version="3.3"
 desc="Utility programs used for creating patch files"
-bdeps="glibc bash"
-deps="$bdeps"
-arch="any"
-flags=""
+bdeps=('glibc' 'bash')
+deps=('glibc' 'bash')
+arch=('any')
+flags=()
 ext="tar.xz"
 
 

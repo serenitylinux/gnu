@@ -3,10 +3,10 @@ name="grep"
 iteration="1"
 version="2.15"
 desc="A string search utility"
-bdeps="glibc bash"
-deps="glibc bash"
-arch="any"
-flags=""
+bdeps=('glibc' 'bash')
+deps=('glibc' 'bash')
+arch=('any')
+flags=()
 ext="tar.xz"
 
 

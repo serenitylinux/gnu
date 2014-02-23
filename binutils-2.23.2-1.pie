@@ -3,10 +3,10 @@ name="binutils"
 iteration="1"
 version="2.23.2"
 desc="Binutils"
-bdeps=""
-deps=""
-arch="any"
-flags=""
+bdeps=()
+deps=()
+arch=('any')
+flags=()
 
 function configure() {
 	rm -fv etc/standards.info

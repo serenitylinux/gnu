@@ -3,10 +3,10 @@ name="less"
 iteration="1"
 version="451"
 desc="Program to view files"
-bdeps="ncurses pcre"
-deps="ncurses pcre"
-arch="any"
-flags=""
+bdeps=('ncurses' 'pcre')
+deps=('ncurses' 'pcre')
+arch=('any')
+flags=()
 
 
 function configure() {

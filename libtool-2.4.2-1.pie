@@ -3,10 +3,10 @@ name="libtool"
 iteration="1"
 version="2.4.2"
 desc="A generic library support script"
-bdeps="gcc"
-deps=""
-arch="any"
-flags=""
+bdeps=('gcc')
+deps=()
+arch=('any')
+flags=()
 
 
 function configure() {

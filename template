@@ -3,10 +3,10 @@ name=""
 iteration="1"
 version=""
 desc=""
-bdeps=""
-deps=""
-arch="any"
-flags=""
+bdeps=()
+deps=()
+arch=('any')
+flags=()
 
 
 function configure() {

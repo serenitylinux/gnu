@@ -3,10 +3,10 @@ name="autoconf"
 iteration="2"
 version="2.69"
 desc="A GNU tool for automatically configuring source code"
-bdeps="gawk m4 bash diffutils"
-deps="$bdeps"
-arch="any"
-flags=""
+bdeps=('gawk' 'm4' 'bash' 'diffutils')
+deps=('gawk' 'm4' 'bash' 'diffutils')
+arch=('any')
+flags=()
 
 
 function configure() {

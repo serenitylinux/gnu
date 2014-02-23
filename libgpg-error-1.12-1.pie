@@ -4,11 +4,11 @@ iteration="1"
 version="1.12"
 desc="Support library for libgcrypt"
 url="http://www.gnupg.org"
-src="ftp://ftp.gnupg.org/gcrypt/${name}/${name}-${version}.tar.bz2"
-bdeps="glibc bash"
-deps="glibc bash"
-arch="any"
-flags=""
+src=('ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.12.tar.bz2')
+bdeps=('glibc' 'bash')
+deps=('glibc' 'bash')
+arch=('any')
+flags=()
 
 
 function configure() {

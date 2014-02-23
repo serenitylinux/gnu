@@ -3,10 +3,10 @@ name="grub"
 iteration="2"
 version="2.00"
 desc="GNU GRand Unified Bootloader"
-bdeps="xz freetype2 gettext bison flex"
-deps="base xz gettext"
-arch="any"
-flags=""
+bdeps=('xz' 'freetype2' 'gettext' 'bison' 'flex')
+deps=('base' 'xz' 'gettext')
+arch=('any')
+flags=()
 
 
 function configure() {

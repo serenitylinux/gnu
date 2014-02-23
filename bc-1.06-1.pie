@@ -3,10 +3,10 @@ name="bc"
 iteration="1"
 version="1.06"
 desc="An arbitrary precision calculator language"
-bdeps="readline flex"
-deps="readline"
-arch="any"
-flags=""
+bdeps=('readline' 'flex')
+deps=('readline')
+arch=('any')
+flags=()
 
 
 function configure() {

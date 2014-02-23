@@ -3,10 +3,10 @@ name="make"
 iteration="1"
 version="4.0"
 desc="GNU make utility to maintain groups of programs"
-bdeps="glibc bash"
-deps="glibc"
-arch="any"
-flags=""
+bdeps=('glibc' 'bash')
+deps=('glibc')
+arch=('any')
+flags=()
 
 
 function configure() {

@@ -3,10 +3,10 @@ name="patch"
 iteration="1"
 version="2.7.1"
 desc="A utility to apply patch files to original sources"
-bdeps="glibc"
-deps="glibc"
-arch="any"
-flags=""
+bdeps=('glibc')
+deps=('glibc')
+arch=('any')
+flags=()
 
 
 function configure() {

@@ -3,10 +3,10 @@ name="libidn"
 iteration="1"
 version="1.28"
 desc="Implementation of the Stringprep, Punycode and IDNA specifications"
-bdeps=""
-deps=""
-arch="any"
-flags=""
+bdeps=()
+deps=()
+arch=('any')
+flags=()
 
 
 function configure() {

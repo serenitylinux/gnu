@@ -3,10 +3,10 @@ name="findutils"
 iteration="1"
 version="4.4.2"
 desc="GNU utilities to locate files"
-bdeps="glibc bash"
-deps="glibc bash"
-arch="any"
-flags=""
+bdeps=('glibc' 'bash')
+deps=('glibc' 'bash')
+arch=('any')
+flags=()
 
 function configure() {
 	default
