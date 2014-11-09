@@ -3,8 +3,8 @@ name="glibc"
 iteration="3"
 version="2.18"
 desc="GNU Standard C Library"
-bdeps=('linux-headers' 'tzdata' 'gcc')
-deps=('linux-headers' 'tzdata')
+bdeps=('linux-headers' 'tzdata' 'gcc' 'glibc(+dev)')
+deps=('linux-headers' 'tzdata' 'glibc')
 arch=('i368' 'x86_64')
 flags=('-charmaps' '-dev' '+locale')
 
