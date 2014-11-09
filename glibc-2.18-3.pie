@@ -1,12 +1,12 @@
 # vim: ft=sh
 name="glibc"
-iteration="1"
+iteration="3"
 version="2.18"
 desc="GNU Standard C Library"
 bdeps=('linux-headers' 'tzdata' 'gcc')
 deps=('linux-headers' 'tzdata')
 arch=('i368' 'x86_64')
-flags=()
+flags=('-charmaps' '-dev' '+locale')
 
 
 function configure() {
@@ -37,8 +37,22 @@ function installpkg() {
 	install -D -m755 locale-gen ${dest_dir}/usr/bin
 	install -d -m755 ${dest_dir}/etc
 	echo 'en_US.UTF-8 UTF-8' > ${dest_dir}/etc/locale.gen
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include/
+		rm ${dest_dir}/usr/lib64/*.a
+	fi
+
+	if ( ! $flag_charmaps ); then
+		rm -rf ${dest_dir}/usr/share/i18n/charmaps
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/i18n/locales
+	fi
 }
 
 function post_install() {
+	mkdir -p /usr/lib/locale/
 	locale-gen
 }
