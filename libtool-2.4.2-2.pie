@@ -1,0 +1,30 @@
+# vim: ft=sh
+name="libtool"
+iteration="2"
+version="2.4.2"
+desc="A generic library support script"
+bdeps=('libc(+dev)')
+deps=('libc')
+flags=('-dev' '-doc')
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	installdoc=""
+	if ( $flag_doc ); then
+		installdoc="install-man install-info"
+	fi
+	make DESTDIR=${dest_dir} install-binSCRIPTS $installdoc install-data-local
+	rm -r ${dest_dir}/usr/share/libtool/libltdl/
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/share/aclocal
+	fi
+}

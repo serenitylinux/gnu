@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="patch"
+iteration="2"
+version="2.7.1"
+desc="A utility to apply patch files to original sources"
+bdeps=('libc(+dev)' 'attr(+dev)')
+deps=('libc' 'attr')
+flags=('-doc')
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+}

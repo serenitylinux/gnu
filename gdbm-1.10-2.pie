@@ -1,0 +1,43 @@
+# vim: ft=sh
+name="gdbm"
+iteration="2"
+version="1.10"
+desc="GNU database library"
+bdeps=('libc(+dev)')
+deps=('libc')
+flags=('-dev' '-doc' '+locale')
+
+
+function configure() {
+	./configure --prefix=/usr \
+              --mandir=/usr/share/man \
+              --infodir=/usr/share/info \
+              --enable-libgdbm-compat
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	install -dm755 "${dest_dir}"/usr/include/gdbm
+	ln -sf ../gdbm.h "${dest_dir}"/usr/include/gdbm/gdbm.h
+	ln -sf ../ndbm.h "${dest_dir}"/usr/include/gdbm/ndbm.h
+	ln -sf ../dbm.h  "${dest_dir}"/usr/include/gdbm/dbm.h
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+		rm ${dest_dir}/usr/lib/*.a
+		rm ${dest_dir}/usr/lib/*.la
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}

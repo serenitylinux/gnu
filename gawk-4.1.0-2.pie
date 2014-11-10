@@ -1,0 +1,35 @@
+# vim: ft=sh
+name="gawk"
+iteration="2"
+version="4.1.0"
+desc="GNU version of awk"
+bdeps=('libc(+dev)' 'mpfr(+dev)' 'gmp(+dev)' 'ncurses(+dev)' 'readline(+dev)')
+deps=('libc' 'mpfr' 'gmp' 'ncurses' 'readline')
+flags=('-doc' '-dev' '+locale')
+
+
+function configure() {
+	./configure --prefix=/usr --libexecdir=/usr/lib --without-libsigsegv
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/usr/lib/gawk/*.la
+		rm -rf ${dest_dir}/usr/include
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}

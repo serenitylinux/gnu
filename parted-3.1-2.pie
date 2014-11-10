@@ -1,0 +1,41 @@
+# vim: ft=sh
+name="parted"
+iteration="2"
+version="3.1"
+desc="A program for modifying partitions"
+bdeps=('e2fsprogs(+dev)' 'pcre(+dev)' 'readline(+dev)' 'libc(+dev)' 'util-linux(+dev)')
+deps=('e2fsprogs' 'pcre' 'readline' 'libc' 'util-linux')
+flags=('-dev' '-doc' '+locale')
+ext="tar.xz"
+
+
+function configure() {
+  ./configure --prefix=/usr \
+              --disable-debug \
+              --disable-device-mapper \
+              --disable-rpath
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+		rm -rf ${dest_dir}/usr/lib/pkgconfig/
+		rm ${dest_dir}/usr/lib/*.a
+		rm ${dest_dir}/usr/lib/*.la
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}

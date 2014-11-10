@@ -1,0 +1,35 @@
+# vim: ft=sh
+name="readline"
+iteration="2"
+version="6.2"
+desc="GNU readline library"
+bdeps=('libc(+dev)' 'ncurses(+dev)')
+deps=('libc' 'ncurses')
+flags=('-dev' '-doc')
+
+
+function configure() {
+	sed -i 's|-Wl,-rpath,$(libdir) ||g' support/shobj-conf
+	./configure --prefix=/usr
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/usr/lib/*.a
+		rm -rf ${dest_dir}/usr/include
+		rm -rf ${dest_dir}/usr/share/readline
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/man
+		rm -rf ${dest_dir}/usr/share/info
+	fi
+
+
+}

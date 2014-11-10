@@ -1,0 +1,49 @@
+# vim: ft=sh
+name="gdb"
+iteration="2"
+version="7.6.2"
+desc="The GNU Debugger"
+bdeps=('ncurses(+dev)' 'readline(+dev)' 'expat(+dev)' 'libc(+dev)')
+deps=('ncurses' 'readline' 'expat' 'libc')
+flags=('-dev' '-doc' '-python')
+
+
+function configure() {
+	wpython=""
+	if ( ! $flag_python ); then
+		wpythin="--without-python"
+	fi
+	./configure --prefix=/usr --disable-nls \
+		--with-system-readline \
+		--with-system-gdbinit=/etc/gdb/gdbinit $wpython
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	# install "custom" system gdbinit
+	install -dm755 $dest_dir/etc/gdb
+	touch $dest_dir/etc/gdb/gdbinit
+
+	# resolve conflicts with binutils
+	rm ${dest_dir}/usr/include/{ansidecl,bfd,bfdlink,dis-asm,symcat}.h
+	rm ${dest_dir}/usr/lib/{libbfd,libopcodes}.a
+	rm ${dest_dir}/usr/share/info/{bfd,configure,standards}.info
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/usr/lib/*.la
+		rm -rf ${dest_dir}/usr/include
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_python ); then
+		rm -rf ${dest_dir}/usr/share/gdb/python
+	fi
+}

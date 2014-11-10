@@ -1,0 +1,25 @@
+# vim: ft=sh
+name="m4"
+iteration="2"
+version="1.4.17"
+desc="The GNU macro processor"
+bdeps=('libc(+dev)')
+deps=('libc')
+flags=('-doc')
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/
+	fi
+}

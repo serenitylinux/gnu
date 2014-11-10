@@ -1,0 +1,34 @@
+# vim: ft=sh
+name="make"
+iteration="2"
+version="4.0"
+desc="GNU make utility to maintain groups of programs"
+bdeps=('libc(+dev)')
+deps=('libc')
+flags=('-dev' '-doc' '+locale')
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}

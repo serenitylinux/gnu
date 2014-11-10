@@ -1,0 +1,29 @@
+# vim: ft=sh
+name="wget"
+iteration="2"
+version="1.15"
+desc="A network utility to retrieve files from the Web"
+bdeps=('pcre(+dev)' 'zlib(+dev)' 'util-linux(+dev)' 'libidn(+dev)' 'libssl(+dev)' 'libc(+dev)')
+deps=('pcre' 'zlib' 'util-linux' 'libidn' 'libssl' 'libc')
+flags=('-doc' '+locale')
+
+function configure() {
+	##TODO support other --with-ssl like gnutls
+	./configure --prefix=/usr --sysconfdir=/etc --with-ssl=openssl
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}

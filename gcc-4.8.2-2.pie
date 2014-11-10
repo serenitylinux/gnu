@@ -1,0 +1,72 @@
+#vim: ft=sh
+name="gcc"
+iteration="2"
+version="4.8.2"
+desc="Gnu Compiler Collection"
+bdeps=('gmp(+dev)' 'mpfr(+dev)' 'libmpc(+dev)' 'diffutils' 'libc(+dev)' 'zlib(+dev)')
+deps=('gmp' 'mpfr' 'libmpc' 'linux-headers' 'binutils' 'libc' 'zlib')
+flags=('-langcpp' '-dev' '-doc' '+locale')
+srcdir="$name-$version"
+src=('http://mirror.clarkson.edu/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.gz')
+
+function configure() {
+	sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+	sed -i -e /autogen/d -e /check.sh/d fixincludes/Makefile.in 
+	mv -v libmudflap/testsuite/libmudflap.c++/pass41-frag.cxx{,.disable}
+
+	lang="c"
+#	if ( $flag_langcpp ); then
+		lang="$lang,c++"
+#	fi
+	
+	./configure --prefix=/usr                  \
+                       --libexecdir=/usr/lib       \
+                       --enable-shared             \
+                       --enable-threads=posix      \
+                       --enable-__cxa_atexit       \
+                       --enable-clocale=gnu        \
+                       --enable-languages=$lang    \
+                       --disable-multilib          \
+                       --disable-bootstrap         \
+                       --disable-install-libiberty \
+                       --with-system-zlib	
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package
+	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
+
+	if ( $flag_langcpp ); then
+		if ( ! $flag_dev ); then
+			rm -rf ${dest_dir}/usr/include
+			rm ${dest_dir}/usr/lib64/*.o
+		fi
+	else
+		rm -rf ${dest_dir}/usr/include/c++
+	fi
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/lib/gcc/
+		rm ${dest_dir}/usr/lib64/*.a
+		rm ${dest_dir}/usr/lib64/*.la
+		rm ${dest_dir}/usr/lib64/*.spec
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+
+	if [ -f ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py ]; then
+		rm ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py
+	fi
+}

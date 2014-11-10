@@ -1,0 +1,30 @@
+# vim: ft=sh
+name="gmp"
+iteration="2"
+version="5.1.3"
+desc="A free library for arbitrary precision arithmetic"
+bdeps=('m4' 'libc(+dev)')
+deps=('m4' 'libc')
+flags=('-dev' '-doc')
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+		rm -rf ${dest_dir}/usr/lib/*.a
+		rm -rf ${dest_dir}/usr/lib/*.la
+	fi
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share
+	fi
+}

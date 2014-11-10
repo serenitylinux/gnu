@@ -1,0 +1,26 @@
+# vim: ft=sh
+name="gzip"
+iteration="2"
+version="1.6"
+desc="GNU compression utility"
+bdeps=('libc(+dev)')
+deps=('libc')
+flags=('-doc')
+srcdir="$name-$version"
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share
+	fi
+}

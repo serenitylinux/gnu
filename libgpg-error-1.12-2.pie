@@ -1,0 +1,39 @@
+# vim: ft=sh
+name="libgpg-error"
+iteration="2"
+version="1.12"
+desc="Support library for libgcrypt"
+url="http://www.gnupg.org"
+src=('ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.12.tar.bz2')
+bdeps=('libc(+dev)')
+deps=('libc')
+flags=('-dev' '-lisp' '+locale')
+
+
+function configure() {
+	./configure --prefix=/usr \
+		--disable-static \
+		--disable-padlock-support
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+		rm -rf ${dest_dir}/usr/share/aclocal
+		rm ${dest_dir}/usr/lib/*.la
+	fi
+
+	if ( ! $flag_lisp ); then
+		rm -rf ${dest_dir}/usr/share/common-lisp
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}

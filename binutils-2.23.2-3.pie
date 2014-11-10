@@ -1,12 +1,11 @@
 #vim: ft=sh
 name="binutils"
-iteration="3"
+iteration="4"
 version="2.23.2"
 desc="Binutils"
-bdeps=('glibc' 'zlib')
-deps=('glibc' 'zlib')
-arch=('any')
-flags=()
+bdeps=('libc(+dev)' 'zlib(+dev)')
+deps=('libc' 'zlib')
+flags=('-doc' '-dev' '+locale')
 
 function configure() {
 	rm -fv etc/standards.info
@@ -23,11 +22,26 @@ function configure() {
 function build() {
 	MAKEFLAGS="$MAKEFLAGS tooldir=/usr"
 	default
-	cp include/libiberty.h /usr/include
 }
 
 function installpkg() {
 	MAKEFLAGS="$MAKEFLAGS tooldir=/usr"
 	default
+	install -Dm644 include/libiberty.h ${dest_dir}/usr/include
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/usr/lib/*.a
+		rm ${dest_dir}/usr/lib/*.la
+		rm -rf ${dest_dir}/usr/include
+	fi
+
+	if ( ! $flag_locale ); then
+		rm ${dest_dir}/usr/share/locale
+	fi
 }
 

@@ -1,0 +1,78 @@
+# vim: ft=sh
+name="ncurses"
+iteration="2"
+version="5.9"
+desc="System V Release 4.0 curses emulation library"
+bdeps=('libc(+dev)')
+deps=('libc')
+arch=('any')
+flags=('-dev' '-doc')
+
+
+function configure() {
+	mkdir ncurses{,w}-build
+	cd ncursesw-build
+		../configure --prefix=/usr --mandir=/usr/share/man \
+		--with-shared --with-normal --without-debug --without-ada \
+		--enable-widec --disable-pc-files
+	cd ../ncurses-build
+		../configure --prefix=/usr \
+		--with-shared --with-normal --without-debug --without-ada
+	cd ..
+}
+
+function build() {
+	cd ncursesw-build
+		default
+	cd ../ncurses-build
+		default
+	cd ..
+}
+
+function installpkg() {
+	local pkgver=5.9
+	cd ncursesw-build
+		default
+
+		# fool packages looking to link to non-wide-character ncurses libraries
+		for lib in ncurses form panel menu; do
+			echo "INPUT(-l${lib}w)" >${dest_dir}/usr/lib/lib${lib}.so
+		done
+
+#		for lib in ncurses ncurses++ form panel menu; do
+#			ln -s ${lib}w.pc ${dest_dir}/usr/lib/pkgconfig/${lib}.pc
+#		done
+
+		# some packages look for -lcurses during build
+		echo "INPUT(-lncursesw)" >${dest_dir}/usr/lib/libcursesw.so
+		ln -s libncurses.so ${dest_dir}/usr/lib/libcurses.so
+
+	# non-widec compatibility libraries
+	cd ../ncurses-build
+		for lib in ncurses form panel menu; do
+			install -Dm755 lib/lib${lib}.so.${pkgver} ${dest_dir}/usr/lib/lib${lib}.so.${pkgver}
+			ln -s lib${lib}.so.${pkgver} ${dest_dir}/usr/lib/lib${lib}.so.5
+		done
+
+	cd ..
+
+	mkdir -p ${dest_dir}/usr/lib64
+	cp -rf ${dest_dir}/usr/lib/* ${dest_dir}/usr/lib64/
+	
+	#Debian hack
+	cp ${dest_dir}/usr/lib64/libncurses.so.5 ${dest_dir}/usr/lib64/libtinfo.so.5
+	# install license, rip it from the readme
+#	cd ..
+		#install -dm755 ${dest_dir}/usr/share/licenses/$pkgname
+		#grep -B 100 '$Id' README > ${dest_dir}/usr/share/licenses/${pkgname}/license.txt
+	
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/usr/lib/*.a
+		rm ${dest_dir}/usr/lib64/*.a
+		rm -rf ${dest_dir}/usr/include
+	fi
+}

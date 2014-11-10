@@ -1,0 +1,30 @@
+# vim: ft=sh
+name="coreutils"
+iteration="3"
+version="8.21"
+desc="The basic file, shell and text manipulation utilities of the GNU operating system"
+bdeps=('libc(+dev)' 'pam(+dev)' 'acl(+dev)' 'attr(+dev)' 'libcap(+dev)' 'libssl(+dev)')
+deps=('libc' 'pam' 'acl' 'attr' 'libcap' 'libssl')
+flags=('-doc')
+ext="tar.xz"
+
+function configure() {
+	./configure --prefix=/usr --libexecdir=/usr/lib 
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}
