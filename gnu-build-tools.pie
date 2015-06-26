@@ -1,0 +1,21 @@
+# vim: ft=sh
+name="gnu-build-tools"
+iteration="2"
+version="1.0.0"
+desc="Packages required to build most gnu packages"
+bdeps=()
+deps=('libc(+dev)' 'gcc(+dev)' 'gawk' 'make' 'tar' 'binutils' 'coreutils' 'sed' 'grep')
+arch=('any')
+skip_defaults="true"
+
+function configure() {
+	none
+}
+
+function build() {
+	none
+}
+
+function installpkg() {
+	none
+}

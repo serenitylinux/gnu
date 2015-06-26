@@ -1,11 +1,11 @@
 #vim: ft=sh
 name="gcc"
-iteration="2"
+iteration="4"
 version="4.8.2"
 desc="Gnu Compiler Collection"
-bdeps=('gmp(+dev)' 'mpfr(+dev)' 'libmpc(+dev)' 'diffutils' 'libc(+dev)' 'zlib(+dev)')
-deps=('gmp' 'mpfr' 'libmpc' 'linux-headers' 'binutils' 'libc' 'zlib')
-flags=('-langcpp' '-dev' '-doc' '+locale')
+bdeps=('gmp(+dev)' 'mpfr(+dev)' 'libmpc(+dev)' 'linux-headers' 'diffutils' 'binutils(+dev)' 'zlib(+dev)' 'curl' 'gnu-build-tools')
+deps=('gmp(?dev)' 'mpfr(?dev)' 'libmpc(?dev)' 'linux-headers' 'binutils' 'libc(?dev)' 'zlib')
+flags=('-dev' '-doc' '+locale')
 srcdir="$name-$version"
 src=('http://mirror.clarkson.edu/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.gz')
 
@@ -15,9 +15,7 @@ function configure() {
 	mv -v libmudflap/testsuite/libmudflap.c++/pass41-frag.cxx{,.disable}
 
 	lang="c"
-#	if ( $flag_langcpp ); then
-		lang="$lang,c++"
-#	fi
+	lang="$lang,c++"
 	
 	./configure --prefix=/usr                  \
                        --libexecdir=/usr/lib       \
@@ -41,13 +39,9 @@ function installpkg() {
 	ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package
 	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
 
-	if ( $flag_langcpp ); then
-		if ( ! $flag_dev ); then
-			rm -rf ${dest_dir}/usr/include
-			rm ${dest_dir}/usr/lib64/*.o
-		fi
-	else
-		rm -rf ${dest_dir}/usr/include/c++
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+		rm ${dest_dir}/usr/lib64/*.o
 	fi
 
 	if ( ! $flag_dev ); then

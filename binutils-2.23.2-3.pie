@@ -3,7 +3,7 @@ name="binutils"
 iteration="4"
 version="2.23.2"
 desc="Binutils"
-bdeps=('libc(+dev)' 'zlib(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc' 'zlib')
 flags=('-doc' '-dev' '+locale')
 

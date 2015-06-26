@@ -1,11 +1,11 @@
 # vim: ft=sh
 name="libgcrypt"
-iteration="2"
+iteration="3"
 version="1.6.0"
 desc="General purpose cryptographic library based on the code from GnuPG"
 url="http://www.gnupg.org"
 src=('ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-1.6.0.tar.bz2')
-bdeps=('libgpg-error(+dev)' 'libc(+dev)')
+bdeps=('libgpg-error(+dev)' 'gnu-build-tools')
 deps=('libgpg-error' 'libc')
 flags=('-dev' '-doc')
 

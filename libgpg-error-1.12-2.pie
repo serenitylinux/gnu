@@ -1,11 +1,11 @@
 # vim: ft=sh
 name="libgpg-error"
-iteration="2"
+iteration="3"
 version="1.12"
 desc="Support library for libgcrypt"
 url="http://www.gnupg.org"
 src=('ftp://ftp.gnupg.org/gcrypt/libgpg-error/libgpg-error-1.12.tar.bz2')
-bdeps=('libc(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc')
 flags=('-dev' '-lisp' '+locale')
 

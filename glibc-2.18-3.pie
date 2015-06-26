@@ -1,10 +1,10 @@
 # vim: ft=sh
 name="glibc"
-iteration="3"
+iteration="4"
 version="2.18"
 desc="GNU Standard C Library"
-bdeps=('linux-headers' 'tzdata' 'gcc' 'glibc(+dev)')
-deps=('linux-headers' 'tzdata' 'glibc')
+bdeps=('gnu-build-tools' 'linux-headers' 'tzdata' 'curl' 'binutils(+dev)' 'libgcrypt(+dev)' 'libssl(+dev)')
+deps=('linux-headers' 'tzdata' 'sed')
 arch=('i368' 'x86_64')
 flags=('-charmaps' '-dev' '+locale')
 
