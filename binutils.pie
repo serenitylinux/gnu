@@ -1,0 +1,100 @@
+# vim: ft=sh
+name="binutils"
+iteration="11"
+version="2.25"
+desc="Binutils"
+bdeps=(
+	'[+stage1] binutils(+dev +stage3)'
+	'[+stage1] gcc(+dev +stage3)'
+	'[+stage1] glibc(+dev +stage2)'
+
+	'[+stage2] binutils(+dev +stage1)'
+	'[+stage2] gcc(+dev +stage1)'
+	'[+stage2] glibc(+dev +stage1)'
+
+	'[+stage1 || +stage2] coreutils'
+	'[+stage1 || +stage2] curl'
+	'[+stage1 || +stage2] bash'
+	'[+stage1 || +stage2] make'
+	'[+stage1 || +stage2] tar'
+	'[+stage1 || +stage2] gawk'
+	'[+stage1 || +stage2] grep'
+	'[+stage1 || +stage2] sed'
+	'[+stage1 || +stage2] base-files'
+
+	'[-stage1] libstdc++'
+
+	'[+stage3] gnu-build-tools'
+)
+deps=('libc' 'zlib')
+flags=('-stage1' '-stage2' '+stage3' '-doc' '-dev' '+locale')
+#TODO add flag deps
+
+function configure() {
+	tmp_target_arch=x86_64
+	target=${tmp_target_arch}-serenity-linux-gnu
+
+	if ( $flag_stage1 ); then
+		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass1.html
+		# TODO remove werror perhaps?
+
+		./configure \
+			--prefix=/usr \
+			--target=$target \
+			--disable-nls \
+			--disable-werror
+	elif ( $flag_stage2 ); then
+		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass2.html
+
+		export CC=$LFS_TGT-gcc
+		export AR=$LFS_TGT-ar
+		export RANLIB=$LFS_TGT-ranlib
+
+		./configure \
+			--prefix=/usr \
+			--disable-nls \
+			--disable-werror \
+			--with-sysroot
+	else
+		rm -fv etc/standards.info
+		sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
+		sed -i -e 's/@colophon/@@colophon/' \
+		-e 's/doc@cygnus.com/doc@@cygnus.com/' bfd/doc/bfd.texinfo
+		./configure \
+			--prefix=/usr \
+			--enable-threads \
+			--enable-plugins \
+			--enable-shared 
+	fi
+}
+
+function build() {
+	MAKEFLAGS="$MAKEFLAGS tooldir=/usr"
+	default
+}
+
+function installpkg() {
+	MAKEFLAGS="$MAKEFLAGS tooldir=/usr"
+	default
+
+	if ( $flag_stage3 ); then
+		#TODO WAT
+		install -Dm644 include/libiberty.h ${dest_dir}/usr/include
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/usr/lib/*.a
+		rm ${dest_dir}/usr/lib/*.la
+		rm -rf ${dest_dir}/usr/include
+	fi
+
+	if ( ! $flag_locale ); then
+		rm ${dest_dir}/usr/share/locale
+	fi
+}
+

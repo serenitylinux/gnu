@@ -1,0 +1,174 @@
+# vim: ft=sh
+name="gcc"
+iteration="11"
+version="4.8.2"
+desc="GNU Compiler Collection"
+bdeps=(
+	#Required all:
+	'linux-headers'
+	'diffutils'
+
+	#Stages 1 and 2
+	'[+stage1] binutils(+dev +stage1)'
+	'[+stage1] gcc(+dev +stage3)'
+	'[+stage1] glibc(+dev +stage2)'
+
+	'[+stage2] binutils(+dev +stage2)'
+	'[+stage2] gcc(+dev +stage1)'
+	'[+stage2] glibc(+dev +stage1)'
+
+	'[+stage1 || +stage2] coreutils'
+	'[+stage1 || +stage2] curl'
+	'[+stage1 || +stage2] bash'
+	'[+stage1 || +stage2] make'
+	'[+stage1 || +stage2] tar'
+	'[+stage1 || +stage2] gawk'
+	'[+stage1 || +stage2] sed'
+	'[+stage1 || +stage2] base-files'
+	'[+stage1 || +stage2] xz'
+	'[+stage1 || +stage2] gzip'
+
+	#curl hack
+	'[+stage1 || +stage2] libgcrypt'
+
+
+	'[-stage1] libstdc++'
+
+	#Stage3(final)
+	'[+stage3] gmp(+dev)'
+	'[+stage3] mpfr(+dev)'
+	'[+stage3] libmpc(+dev)'
+	'[+stage3] gnu-build-tools'
+
+)
+deps=(
+	'libc'
+	'binutils'
+	'[+stage3] gmp(?dev)'
+	'[+stage3] mpfr(?dev)'
+	'[+stage3] libmpc(?dev)'
+	'[+stage3] linux-headers'
+	'[+stage3] zlib'
+)
+flags=('-stage1' '-stage2' '+stage3' '-dev' '-doc' '+locale')
+#TODO add flag deps
+
+srcdir="$name-$version"
+src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
+
+function configure() {
+	lang="c,c++"
+	tmp_target_arch=x86_64
+	target=${tmp_target_arch}-serenity-linux-gnu
+
+	# Fetch gmp, mpfr, gmp and mpc to be included directly
+	# This is only needed for stage[1,2] builds
+	if ( $flag_stage1 || $flag_stage2 ); then
+		cd ..
+		gmp_version=5.1.3
+		mpc_version=1.0.1
+		mpfr_version=3.1.2
+		curl "http://mirror.clarkson.edu/gnu/gmp/gmp-${gmp_version}.tar.xz" -o gmp.tar.xz
+		curl "http://mirror.clarkson.edu/gnu/mpc/mpc-${mpc_version}.tar.gz" -o mpc.tar.xz
+		curl "http://www.mpfr.org/mpfr-${mpfr_version}/mpfr-${mpfr_version}.tar.xz" -o mpfr.tar.xz
+		tar -xf gmp.tar.xz
+		tar -xf mpc.tar.xz
+		tar -xf mpfr.tar.xz
+		cd -
+		mv ../gmp-${gmp_version} ./gmp
+		mv ../mpc-${mpc_version} ./mpc
+		mv ../mpfr-${mpfr_version} ./mpfr
+	fi
+
+	if ( $flag_stage1 ); then
+		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass1.html
+		./configure \
+			--target=$target \
+			--prefix=/usr \
+			--with-glibc-version=2.11 \
+			--with-newlib \
+			--without-headers \
+			--disable-nls \
+			--disable-shared \
+			--disable-multilib \
+			--disable-decimal-float \
+			--disable-threads \
+			--disable-libatomic \
+			--disable-libgomp \
+			--disable-libquadmath \
+			--disable-libssp \
+			--disable-libvtv \
+			--disable-libstdcxx \
+			--enable-languages=c,c++
+	elif ( $flag_stage2 ); then
+		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass2.html
+
+		cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
+			`dirname $(${target}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
+
+		export CC=$target-gcc
+		export CXX=$target-g++
+		export AR=$target-ar
+		export RANLIB=$target-ranlib
+
+		../gcc-5.1.0/configure
+			--prefix=/usr \
+			--disable-libstdcxx-pch \
+			--disable-multilib \
+			--disable-bootstrap \
+			--disable-libgomp
+			--enable-languages=c,c++ \
+
+	else
+		./configure \
+			--prefix=/usr \
+			--libexecdir=/usr/lib \
+			--disable-shared \
+			--enable-threads=posix \
+			--enable-__cxa_atexit \
+			--enable-clocale=gnu \
+			--disable-libstdcxx-pch \
+			--enable-languages=$lang \
+			--disable-multilib \
+			--disable-bootstrap \
+			--with-system-zlib
+	fi
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	#default
+	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
+
+	default
+
+	ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include
+		rm ${dest_dir}/usr/lib64/*.o
+	fi
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/lib/gcc/
+		rm ${dest_dir}/usr/lib64/*.a
+		rm ${dest_dir}/usr/lib64/*.la
+		rm ${dest_dir}/usr/lib64/*.spec
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/usr/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+
+	if [ -f ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py ]; then
+		rm ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py
+	fi
+}

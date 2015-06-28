@@ -1,0 +1,99 @@
+# vim: ft=sh
+name="glibc"
+iteration="10"
+version="2.19"
+desc="GNU Standard C Library"
+bdeps=(
+	'linux-headers'
+
+	'[+stage1] binutils(+dev +stage1)'
+	'[+stage1] gcc(+dev +stage1)'
+	'[+stage1] glibc(+dev +stage3)'
+
+	'[+stage1] coreutils'
+	'[+stage1] bash'
+	'[+stage1] make'
+	'[+stage1] tar'
+	'[+stage1] gawk'
+	'[+stage1] sed'
+	'[+stage1] base-files'
+
+	'[+stage2] gnu-build-tools'
+	'[+stage2] tzdata'
+	'[+stage2] curl'
+)
+deps=(
+	'linux-headers'
+	'[+stage2] tzdata'
+	'[+stage2] sed'
+)
+arch=('i368' 'x86_64')
+flags=('-stage1' '-stage2' '-charmaps' '-dev' '+locale')
+#TODO add flag deps
+
+function configure() {
+	tmp_target_arch=x86_64
+	target=${tmp_target_arch}-serenity-linux-gnu
+
+	# needs this to build with make 4.0
+	sed -r -i 's/(3..89..)/\1 | 4.*/' ./configure
+
+	mkdir ../build-glibc
+	cd ../build-glibc
+
+	if ( $flag_stage1 ); then
+		../${srcdir}/configure \
+			--prefix=/usr \
+			--host=$target \
+			--build=$(./scripts/config.guess) \
+			--disable-profile \
+			--enable-kernel=2.6.32 \
+			--enable-obsolete-rpc
+	else
+		curl -k "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc" > ../${srcdir}/locale-gen
+		../${srcdir}/configure \
+			--prefix=/usr/ \
+			--disable-profile \
+			--libexecdir=/usr/lib/glibc \
+			--enable-obsolete-rpc
+	fi
+}
+
+function build() {
+	cd ../build-glibc
+	default
+}
+
+function installpkg() {
+	cd ../build-glibc
+	default
+
+	cd ../${srcdir}
+	install -D -m644 COPYING ${dest_dir}/usr/share/licenses/${name}-${version}/LICENSE
+
+	if ( $flag_stage2 ); then
+		install -D -m755 locale-gen ${dest_dir}/usr/bin
+		install -d -m755 ${dest_dir}/etc
+		echo 'en_US.UTF-8 UTF-8' > ${dest_dir}/etc/locale.gen
+	fi
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/usr/include/
+		rm ${dest_dir}/usr/lib64/*.a
+	fi
+
+	if ( ! $flag_charmaps ); then
+		rm -rf ${dest_dir}/usr/share/i18n/charmaps
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/i18n/locales
+	fi
+}
+
+function post_install() {
+	if ( $flag_stage3 ); then
+		mkdir -p /usr/lib/locale/
+		locale-gen
+	fi
+}

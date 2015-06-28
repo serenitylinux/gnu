@@ -1,33 +1,30 @@
-#vim: ft=sh
+# vim: ft=sh
 name="libstdc++"
-iteration="6"
+iteration="10"
 version="4.8.2"
-desc="Gnu Compiler Collection"
-bdeps=('gmp(+dev)' 'mpfr(+dev)' 'libmpc(+dev)' 'linux-headers' 'diffutils' 'binutils(+dev)' 'zlib(+dev)' 'curl' 'gnu-build-tools')
-deps=('gmp(?dev)' 'mpfr(?dev)' 'libmpc(?dev)' 'linux-headers' 'binutils' 'libc(?dev)' 'zlib')
-flags=('-dev' '-doc' '+locale')
-srcdir="$name-$version"
-src=('http://mirror.clarkson.edu/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.gz')
+desc="GNU Compiler Collection's Standard C++ Library"
+bdeps=(
+	'linux-headers'
+	'gnu-build-tools'
+)
+deps=('linux-headers')
+flags=()
+
+srcdir="gcc-$version"
+src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
 
 function configure() {
-	sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
-	sed -i -e /autogen/d -e /check.sh/d fixincludes/Makefile.in 
-	mv -v libmudflap/testsuite/libmudflap.c++/pass41-frag.cxx{,.disable}
+	tmp_target_arch=x86_64
+	target=${tmp_target_arch}-serenity-linux-gnu
 
-	lang="c"
-	lang="$lang,c++"
-	
-	./configure --prefix=/usr                  \
-                       --libexecdir=/usr/lib       \
-                       --disable-shared            \
-                       --enable-threads=posix      \
-                       --enable-__cxa_atexit       \
-                       --enable-clocale=gnu        \
-		       --disable-libstdcxx-pch     \
-                       --enable-languages=$lang    \
-                       --disable-multilib          \
-                       --disable-bootstrap         \
-                       --with-system-zlib
+	# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-libstdc++.html
+	./libstdc++-v3/configure \
+		--host=$target \
+		--prefix=/usr \
+		--disable-multilib \
+		--disable-nls \
+		--disable-libstdcxx-threads \
+		--disable-libstdcxx-pch
 }
 
 function build() {
@@ -36,31 +33,4 @@ function build() {
 
 function installpkg() {
 	default
-	ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package
-	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
-
-	if ( ! $flag_dev ); then
-		rm -rf ${dest_dir}/usr/include
-		rm ${dest_dir}/usr/lib64/*.o
-	fi
-
-	if ( ! $flag_dev ); then
-		rm -rf ${dest_dir}/usr/lib/gcc/
-		rm ${dest_dir}/usr/lib64/*.a
-		rm ${dest_dir}/usr/lib64/*.la
-		rm ${dest_dir}/usr/lib64/*.spec
-	fi
-
-	if ( ! $flag_doc ); then
-		rm -rf ${dest_dir}/usr/share/info
-		rm -rf ${dest_dir}/usr/share/man
-	fi
-
-	if ( ! $flag_locale ); then
-		rm -rf ${dest_dir}/usr/share/locale
-	fi
-
-	if [ -f ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py ]; then
-		rm ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py
-	fi
 }
