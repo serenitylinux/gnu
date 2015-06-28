@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="gzip"
-iteration="2"
+iteration="3"
 version="1.6"
 desc="GNU compression utility"
-bdeps=('libc(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc')
 flags=('-doc')
 srcdir="$name-$version"

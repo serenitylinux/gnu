@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="readline"
-iteration="2"
+iteration="3"
 version="6.2"
 desc="GNU readline library"
-bdeps=('libc(+dev)' 'ncurses(+dev)')
+bdeps=('gnu-build-tools' 'ncurses(+dev)')
 deps=('libc' 'ncurses')
 flags=('-dev' '-doc')
 

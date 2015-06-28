@@ -1,11 +1,11 @@
 # vim: ft=sh
 name="libmpc"
-iteration="2"
+iteration="3"
 version="1.0.1"
 desc="Library for the arithmetic of complex numbers with arbitrarily high precision"
 url="http://www.multiprecision.org/"
 src=('http://mirror.clarkson.edu/gnu/mpc/mpc-1.0.1.tar.gz')
-bdeps=('libc(+dev)' 'gmp(+dev)' 'mpfr(+dev)')
+bdeps=('gnu-build-tools' 'gmp(+dev)' 'mpfr(+dev)')
 deps=('libc' 'gmp' 'mpfr')
 flags=('-dev' '-doc')
 srcdir="mpc-$version"

@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="ncurses"
-iteration="2"
+iteration="3"
 version="5.9"
 desc="System V Release 4.0 curses emulation library"
-bdeps=('libc(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc')
 arch=('any')
 flags=('-dev' '-doc')

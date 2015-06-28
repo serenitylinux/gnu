@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="tar"
-iteration="2"
+iteration="3"
 version="1.27"
 desc="Utility used to store, backup, and transport files"
-bdeps=('libc(+dev)' 'acl(+dev)' 'attr(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc' 'acl' 'attr')
 flags=('-doc' '+locale')
 

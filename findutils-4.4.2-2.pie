@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="findutils"
-iteration="2"
+iteration="3"
 version="4.4.2"
 desc="GNU utilities to locate files"
-bdeps=('libc(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc')
 flags=('-doc' '+locale')
 

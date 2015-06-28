@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="coreutils"
-iteration="3"
+iteration="4"
 version="8.21"
 desc="The basic file, shell and text manipulation utilities of the GNU operating system"
-bdeps=('libc(+dev)' 'pam(+dev)' 'acl(+dev)' 'attr(+dev)' 'libcap(+dev)' 'libssl(+dev)')
+bdeps=('gnu-build-tools' 'pam(+dev)' 'acl(+dev)' 'attr(+dev)' 'libcap(+dev)' 'libssl(+dev)')
 deps=('libc' 'pam' 'acl' 'attr' 'libcap' 'libssl')
 flags=('-doc')
 ext="tar.xz"

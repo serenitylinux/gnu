@@ -1,7 +1,7 @@
 #vim: ft=sh
 name="binutils"
 iteration="4"
-version="2.23.2"
+version="2.25"
 desc="Binutils"
 bdeps=('gnu-build-tools')
 deps=('libc' 'zlib')

@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="diffutils"
-iteration="2"
+iteration="3"
 version="3.3"
 desc="Utility programs used for creating patch files"
-bdeps=('libc(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc')
 flags=('-doc' '+locale')
 ext="tar.xz"

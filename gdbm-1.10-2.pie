@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="gdbm"
-iteration="2"
+iteration="3"
 version="1.10"
 desc="GNU database library"
-bdeps=('libc(+dev)')
+bdeps=('gnu-build-tools')
 deps=('libc')
 flags=('-dev' '-doc' '+locale')
 

@@ -3,8 +3,8 @@ name="gnu-build-tools"
 iteration="2"
 version="1.0.0"
 desc="Packages required to build most gnu packages"
-bdeps=()
-deps=('libc(+dev)' 'gcc(+dev)' 'gawk' 'make' 'tar' 'binutils' 'coreutils' 'sed' 'grep')
+bdeps=('gnu-build-tools')
+deps=('libc(+dev)' 'gcc(+dev)' 'bash' 'gawk' 'make' 'tar' 'binutils' 'coreutils' 'sed' 'grep' 'gzip')
 arch=('any')
 skip_defaults="true"
 

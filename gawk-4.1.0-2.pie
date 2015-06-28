@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="gawk"
-iteration="2"
+iteration="3"
 version="4.1.0"
 desc="GNU version of awk"
-bdeps=('libc(+dev)' 'mpfr(+dev)' 'gmp(+dev)' 'ncurses(+dev)' 'readline(+dev)')
+bdeps=('gnu-build-tools' 'mpfr(+dev)' 'gmp(+dev)' 'ncurses(+dev)' 'readline(+dev)')
 deps=('libc' 'mpfr' 'gmp' 'ncurses' 'readline')
 flags=('-doc' '-dev' '+locale')
 

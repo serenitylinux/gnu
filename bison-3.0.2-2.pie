@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="bison"
-iteration="2"
+iteration="4"
 version="3.0.2"
 desc="The GNU general-purpose parser generator"
-bdeps=('libc(+dev)' 'm4')
+bdeps=('gnu-build-tools' 'm4' 'perl' 'diffutils')
 deps=('libc')
 flags=('-doc' '+locale')
 

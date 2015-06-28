@@ -1,6 +1,6 @@
 #vim: ft=sh
-name="gcc"
-iteration="7"
+name="libstdc++"
+iteration="6"
 version="4.8.2"
 desc="Gnu Compiler Collection"
 bdeps=('gmp(+dev)' 'mpfr(+dev)' 'libmpc(+dev)' 'linux-headers' 'diffutils' 'binutils(+dev)' 'zlib(+dev)' 'curl' 'gnu-build-tools')
@@ -10,16 +10,14 @@ srcdir="$name-$version"
 src=('http://mirror.clarkson.edu/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.gz')
 
 function configure() {
-	#sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
-	#sed -i -e /autogen/d -e /check.sh/d fixincludes/Makefile.in 
-	#mv -v libmudflap/testsuite/libmudflap.c++/pass41-frag.cxx{,.disable}
+	sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+	sed -i -e /autogen/d -e /check.sh/d fixincludes/Makefile.in 
+	mv -v libmudflap/testsuite/libmudflap.c++/pass41-frag.cxx{,.disable}
 
 	lang="c"
 	lang="$lang,c++"
-
-	mkdir ../gcc-build
-	cd ../gcc-build
-	../$srcdir/configure --prefix=/usr                  \
+	
+	./configure --prefix=/usr                  \
                        --libexecdir=/usr/lib       \
                        --disable-shared            \
                        --enable-threads=posix      \
@@ -28,40 +26,18 @@ function configure() {
 		       --disable-libstdcxx-pch     \
                        --enable-languages=$lang    \
                        --disable-multilib          \
+                       --disable-bootstrap         \
                        --with-system-zlib
-	cd -
-
-	mkdir ../libstdcpp-build
-	cd ../libstdcpp-build
-	../$srcdir/libstdc++-v3/configure --prefix=/usr                  \
-                       --libexecdir=/usr/lib       \
-		       --disable-libstdcxx-pch     \
-		       --disable-libstdcxx-threads \
-                       --disable-multilib          \
-	               --disable-nls
-	cd -
 }
 
 function build() {
-	cd ../gcc-build
 	default
-	cd -
-	cd ../libstdcpp-build
-	default
-	cd -
 }
 
 function installpkg() {
-	#default
-	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
-
-	cd ../gcc-build
 	default
 	ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package
-	cd -
-	cd ../libstdcpp-build
-	default
-	cd -
+	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
 
 	if ( ! $flag_dev ); then
 		rm -rf ${dest_dir}/usr/include

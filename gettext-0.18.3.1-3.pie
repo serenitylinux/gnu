@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="gettext"
-iteration="3"
+iteration="4"
 version="0.18.3.1"
 desc="GNU internationalization library"
-bdeps=('libc(+dev)' 'acl(+dev)')
+bdeps=('gnu-build-tools' 'acl(+dev)')
 deps=('libc' 'acl')
 flags=('-dev' '-doc' '+locale')
 
