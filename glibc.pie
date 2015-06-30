@@ -1,6 +1,6 @@
 # vim: ft=sh
 name="glibc"
-iteration="10"
+iteration="20"
 version="2.19"
 desc="GNU Standard C Library"
 bdeps=(
@@ -8,7 +8,7 @@ bdeps=(
 
 	'[+stage1] binutils(+dev +stage1)'
 	'[+stage1] gcc(+dev +stage1)'
-	'[+stage1] glibc(+dev +stage3)'
+	'[+stage1] glibc(+dev +stage2)'
 
 	'[+stage1] coreutils'
 	'[+stage1] bash'
@@ -17,6 +17,8 @@ bdeps=(
 	'[+stage1] gawk'
 	'[+stage1] sed'
 	'[+stage1] base-files'
+	'[+stage1] grep'
+	'[+stage1] gzip'
 
 	'[+stage2] gnu-build-tools'
 	'[+stage2] tzdata'
@@ -32,11 +34,10 @@ flags=('-stage1' '-stage2' '-charmaps' '-dev' '+locale')
 #TODO add flag deps
 
 function configure() {
-	tmp_target_arch=x86_64
-	target=${tmp_target_arch}-serenity-linux-gnu
-
 	# needs this to build with make 4.0
 	sed -r -i 's/(3..89..)/\1 | 4.*/' ./configure
+	#tmp_target_arch=x86_64
+	#target=${tmp_target_arch}-serenity-linux-gnu
 
 	mkdir ../build-glibc
 	cd ../build-glibc
@@ -44,11 +45,9 @@ function configure() {
 	if ( $flag_stage1 ); then
 		../${srcdir}/configure \
 			--prefix=/usr \
-			--host=$target \
-			--build=$(./scripts/config.guess) \
 			--disable-profile \
 			--enable-kernel=2.6.32 \
-			--enable-obsolete-rpc
+			--enable-obsolete-rpc \
 	else
 		curl -k "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc" > ../${srcdir}/locale-gen
 		../${srcdir}/configure \

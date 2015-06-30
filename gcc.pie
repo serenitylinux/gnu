@@ -1,6 +1,6 @@
 # vim: ft=sh
 name="gcc"
-iteration="11"
+iteration="20"
 version="4.8.2"
 desc="GNU Compiler Collection"
 bdeps=(
@@ -27,12 +27,14 @@ bdeps=(
 	'[+stage1 || +stage2] base-files'
 	'[+stage1 || +stage2] xz'
 	'[+stage1 || +stage2] gzip'
+	'[+stage1 || +stage2] grep'
 
 	#curl hack
 	'[+stage1 || +stage2] libgcrypt'
 
 
-	'[-stage1] libstdc++'
+	'[+stage2] libstdc++(+stage2)'
+	'[+stage3] libstdc++'
 
 	#Stage3(final)
 	'[+stage3] gmp(+dev)'
@@ -58,8 +60,11 @@ src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
 
 function configure() {
 	lang="c,c++"
-	tmp_target_arch=x86_64
-	target=${tmp_target_arch}-serenity-linux-gnu
+#	tmp_target_arch=x86_64
+#	target=${tmp_target_arch}-serenity-linux-gnu
+
+	mkdir ../build
+	cd ../build
 
 	# Fetch gmp, mpfr, gmp and mpc to be included directly
 	# This is only needed for stage[1,2] builds
@@ -75,17 +80,15 @@ function configure() {
 		tar -xf mpc.tar.xz
 		tar -xf mpfr.tar.xz
 		cd -
-		mv ../gmp-${gmp_version} ./gmp
-		mv ../mpc-${mpc_version} ./mpc
-		mv ../mpfr-${mpfr_version} ./mpfr
+		mv ../gmp-${gmp_version} ../${srcdir}/gmp
+		mv ../mpc-${mpc_version} ../${srcdir}/mpc
+		mv ../mpfr-${mpfr_version} ../${srcdir}/mpfr
 	fi
 
 	if ( $flag_stage1 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass1.html
-		./configure \
-			--target=$target \
+		../${srcdir}/configure \
 			--prefix=/usr \
-			--with-glibc-version=2.11 \
 			--with-newlib \
 			--without-headers \
 			--disable-nls \
@@ -95,39 +98,40 @@ function configure() {
 			--disable-threads \
 			--disable-libatomic \
 			--disable-libgomp \
+			--disable-libitm \
 			--disable-libquadmath \
+			--disable-libsanitizer \
 			--disable-libssp \
 			--disable-libvtv \
-			--disable-libstdcxx \
+			--disable-libcilkrts \
+			--disable-libstdc++-v3 \
 			--enable-languages=c,c++
 	elif ( $flag_stage2 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass2.html
 
+		cd ../${srcdir}
+#		cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
+#			`dirname $(${target}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
 		cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
-			`dirname $(${target}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
+			`dirname $(gcc -print-libgcc-file-name)`/include-fixed/limits.h
+		cd -
 
-		export CC=$target-gcc
-		export CXX=$target-g++
-		export AR=$target-ar
-		export RANLIB=$target-ranlib
+#		export CC=$target-gcc
+#		export CXX=$target-g++
+#		export AR=$target-ar
+#		export RANLIB=$target-ranlib
 
-		../gcc-5.1.0/configure
+		../${srcdir}/configure \
 			--prefix=/usr \
+			--enable-languages=c,c++ \
 			--disable-libstdcxx-pch \
 			--disable-multilib \
 			--disable-bootstrap \
 			--disable-libgomp
-			--enable-languages=c,c++ \
 
 	else
-		./configure \
+		../${srcdir}/configure \
 			--prefix=/usr \
-			--libexecdir=/usr/lib \
-			--disable-shared \
-			--enable-threads=posix \
-			--enable-__cxa_atexit \
-			--enable-clocale=gnu \
-			--disable-libstdcxx-pch \
 			--enable-languages=$lang \
 			--disable-multilib \
 			--disable-bootstrap \
@@ -136,6 +140,7 @@ function configure() {
 }
 
 function build() {
+	cd ../build
 	default
 }
 
@@ -143,6 +148,7 @@ function installpkg() {
 	#default
 	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
 
+	cd ../build
 	default
 
 	ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package

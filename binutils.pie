@@ -1,12 +1,13 @@
 # vim: ft=sh
 name="binutils"
-iteration="11"
+iteration="20"
 version="2.25"
 desc="Binutils"
 bdeps=(
 	'[+stage1] binutils(+dev +stage3)'
 	'[+stage1] gcc(+dev +stage3)'
 	'[+stage1] glibc(+dev +stage2)'
+	'[+stage1] findutils'
 
 	'[+stage2] binutils(+dev +stage1)'
 	'[+stage2] gcc(+dev +stage1)'
@@ -22,7 +23,8 @@ bdeps=(
 	'[+stage1 || +stage2] sed'
 	'[+stage1 || +stage2] base-files'
 
-	'[-stage1] libstdc++'
+	'[+stage2] libstdc++(+stage2)'
+	'[+stage3] libstdc++'
 
 	'[+stage3] gnu-build-tools'
 )
@@ -31,8 +33,8 @@ flags=('-stage1' '-stage2' '+stage3' '-doc' '-dev' '+locale')
 #TODO add flag deps
 
 function configure() {
-	tmp_target_arch=x86_64
-	target=${tmp_target_arch}-serenity-linux-gnu
+#	tmp_target_arch=x86_64
+#	target=${tmp_target_arch}-serenity-linux-gnu
 
 	if ( $flag_stage1 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass1.html
@@ -40,21 +42,19 @@ function configure() {
 
 		./configure \
 			--prefix=/usr \
-			--target=$target \
 			--disable-nls \
 			--disable-werror
 	elif ( $flag_stage2 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass2.html
 
-		export CC=$LFS_TGT-gcc
-		export AR=$LFS_TGT-ar
-		export RANLIB=$LFS_TGT-ranlib
+#		export CC=$LFS_TGT-gcc
+#		export AR=$LFS_TGT-ar
+#		export RANLIB=$LFS_TGT-ranlib
 
 		./configure \
 			--prefix=/usr \
 			--disable-nls \
-			--disable-werror \
-			--with-sysroot
+			--disable-werror
 	else
 		rm -fv etc/standards.info
 		sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
