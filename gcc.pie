@@ -44,9 +44,9 @@ function configure() {
 	# This is only needed for stage[1,2] builds
 	if ( $flag_stage1 || $flag_stage2 ); then
 		cd ..
-		gmp_version=5.1.3
-		mpc_version=1.0.1
-		mpfr_version=3.1.2
+		gmp_version=6.0.0a
+		mpc_version=1.0.3
+		mpfr_version=3.1.3
 		curl "http://mirror.clarkson.edu/gnu/gmp/gmp-${gmp_version}.tar.xz" -o gmp.tar.xz
 		curl "http://mirror.clarkson.edu/gnu/mpc/mpc-${mpc_version}.tar.gz" -o mpc.tar.xz
 		curl "http://www.mpfr.org/mpfr-${mpfr_version}/mpfr-${mpfr_version}.tar.xz" -o mpfr.tar.xz
@@ -54,6 +54,7 @@ function configure() {
 		tar -xf mpc.tar.xz
 		tar -xf mpfr.tar.xz
 		cd -
+		gmp_version=6.0.0
 		mv ../gmp-${gmp_version} ../${srcdir}/gmp
 		mv ../mpc-${mpc_version} ../${srcdir}/mpc
 		mv ../mpfr-${mpfr_version} ../${srcdir}/mpfr
@@ -61,27 +62,29 @@ function configure() {
 		for file in $(find ../${srcdir}/gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
 		do
 			cp -uv $file{,.orig}
-			sed -e "s@/lib\(64\)\?\(32\)\?/ld@/$TMPROOT/tools&@g" -e "s@/usr@/$TMPROOT/tools@g" $file.orig > $file
-			cat >> $file << EOF
+			sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' -e 's@/usr@/tools@g' $file.orig > $file
+			echo '
 			#undef STANDARD_STARTFILE_PREFIX_1
 			#undef STANDARD_STARTFILE_PREFIX_2
-			#define STANDARD_STARTFILE_PREFIX_1 "$TMPROOT/tools/lib/"
+			#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
 			#define STANDARD_STARTFILE_PREFIX_2 ""
-EOF
+			' >> $file
 			touch $file.orig
 		done
 	fi
 
 	if ( $flag_stage1 ); then
-		export PATH=$TMPROOT/tools/bin:$PATH
+		export PATH=/tools/bin:$PATH
 
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass1.html
 		../${srcdir}/configure \
+			--prefix=/tools \
+			--with-sysroot=$TMPROOT \
+			--with-glibc-version=2.11 \
 			--with-newlib \
 			--without-headers \
-			--prefix=$TMPROOT/tools \
-			--with-local-prefix=$TMPROOT/tools \
-			--with-native-system-header-dir=$TMPROOT/tools/include \
+			--with-local-prefix=/tools \
+			--with-native-system-header-dir=/tools/include \
 			--disable-nls \
 			--disable-shared \
 			--disable-multilib \
@@ -105,9 +108,9 @@ EOF
 		cd -
 
 		../${srcdir}/configure \
-			--prefix=$TMPROOT/tools \
-			--with-local-prefix=$TMPROOT/tools \
-			--with-native-system-header-dir=$TMPROOT/tools/include \
+			--prefix=/tools \
+			--with-local-prefix=/tools \
+			--with-native-system-header-dir=/tools/include \
 			--enable-languages=c,c++ \
 			--disable-libstdcxx-pch \
 			--disable-multilib \

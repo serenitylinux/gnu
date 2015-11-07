@@ -23,12 +23,15 @@ function configure() {
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass1.html
 		# TODO remove werror perhaps?
 
-		export PATH=$TMPROOT/tools/bin:$PATH
+		mkdir -p ${dest_dir}/$TMPROOT/tools
+		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
+
+		export PATH=/tools/bin:$PATH
 
 		./configure \
-			--prefix=$TMPROOT/tools \
+			--prefix=/tools \
 			--with-sysroot=$TMPROOT \
-			--with-lib-path=$TMPROOT/tools/lib \
+			--with-lib-path=/tools/lib \
 			--disable-nls \
 			--disable-werror
 	elif ( $flag_stage2 ); then
@@ -37,10 +40,10 @@ function configure() {
 		export PATH=$TMPROOT/tools/bin:$PATH
 
 		./configure \
-			--prefix=$TMPROOT/tools \
+			--prefix=/tools \
 			--with-sysroot=$TMPROOT \
 			--disable-nls \
-			--with-lib-path=$TMPROOT/tools/lib \
+			--with-lib-path=/tools/lib \
 			--disable-werror
 	else
 		./configure \
@@ -67,11 +70,11 @@ function installpkg() {
 
 	if ( $flag_stage1 ); then
 		case $(uname -m) in
-			x86_64) mkdir -v $TMPROOT/tools/lib && ln -sv lib $TMPROOT/tools/lib64 ;;
+			x86_64) mkdir -v ${dest_dir}/tools/lib && ln -sv lib ${dest_dir}/tools/lib64 ;;
 		esac
 	fi
                       
-	default       
+	default
 
 	if ( $flag_stage3 ); then
 		#TODO WAT
@@ -92,5 +95,9 @@ function installpkg() {
 	if ( ! $flag_locale ); then
 		rm ${dest_dir}/usr/share/locale
 	fi
+
+
+	rm ${dest_dir}/tools
+	ln -sv /$TMPROOT/tools ${dest_dir}/tools
 }
 
