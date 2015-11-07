@@ -1,7 +1,7 @@
 # vim: ft=sh
 name="libstdc++"
 iteration="10"
-version="4.8.2"
+version="5.2.0"
 desc="GNU Compiler Collection's Standard C++ Library"
 bdeps=(
 	'[+stage1] binutils(+dev +stage1)'
@@ -18,21 +18,25 @@ flags=('-stage1' '+stage3')
 srcdir="gcc-$version"
 src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
 
-function configure() {
-	#tmp_target_arch=x86_64
-	#target=${tmp_target_arch}-serenity-linux-gnu
+export PATH=/tools/bin:$PATH
 
+function configure() {
 	mkdir ../build
 	cd ../build
 
+	mkdir -p ${dest_dir}/$TMPROOT/tools
+	ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
+
 	# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-libstdc++.html
 	../${srcdir}/libstdc++-v3/configure \
-		--prefix=/usr \
+		--host=$TMPTGT \
+		--prefix=/tools \
 		--disable-multilib \
 		--disable-shared \
 		--disable-nls \
 		--disable-libstdcxx-threads \
-		--disable-libstdcxx-pch
+		--disable-libstdcxx-pch \
+		--with-gxx-include-dir=/tools/$TMPTGT/include/c++/$version
 }
 
 function build() {
@@ -43,4 +47,6 @@ function build() {
 function installpkg() {
 	cd ../build
 	default
+
+	rm ${dest_dir}/tools
 }

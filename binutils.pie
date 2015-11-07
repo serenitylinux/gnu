@@ -18,6 +18,10 @@ deps=(
 flags=('-stage1' '-stage2' '+stage3' '-doc' '-dev' '+locale')
 #TODO add flag deps
 
+if ( $flag_stage1 || $flag_stage2 ); then
+	export PATH=/tools/bin:$PATH
+fi
+
 function configure() {
 	if ( $flag_stage1 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass1.html
@@ -26,22 +30,21 @@ function configure() {
 		mkdir -p ${dest_dir}/$TMPROOT/tools
 		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
 
-		export PATH=/tools/bin:$PATH
-
 		./configure \
 			--prefix=/tools \
 			--with-sysroot=$TMPROOT \
 			--with-lib-path=/tools/lib \
+			--target=$TMPTGT \
 			--disable-nls \
 			--disable-werror
 	elif ( $flag_stage2 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass2.html
 
-		export PATH=$TMPROOT/tools/bin:$PATH
+		export CC=$TMPTGT-gcc AR=$TMPTGT-ar RANLIB=$TMPTGT-ranlib
 
 		./configure \
 			--prefix=/tools \
-			--with-sysroot=$TMPROOT \
+			--with-sysroot \
 			--disable-nls \
 			--with-lib-path=/tools/lib \
 			--disable-werror

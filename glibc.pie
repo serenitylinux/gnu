@@ -18,24 +18,35 @@ deps=(
 	'[+stage3] sed'
 )
 arch=('i368' 'x86_64')
-flags=('-stage1' '-stage3' '-charmaps' '-dev' '+locale')
+flags=('-stage1' '+stage3' '-charmaps' '-dev' '+locale')
 #TODO add flag deps
+
+if ( $flag_stage1 ); then
+	export PATH=/tools/bin:$PATH
+fi
 
 function configure() {
 	# needs this to build with make 4.0
 	sed -r -i 's/(3..89..)/\1 | 4.*/' ./configure
-	#tmp_target_arch=x86_64
-	#target=${tmp_target_arch}-serenity-linux-gnu
 
 	mkdir ../build-glibc
 	cd ../build-glibc
 
 	if ( $flag_stage1 ); then
+		mkdir -p ${dest_dir}/$TMPROOT/tools
+		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
+
 		../${srcdir}/configure \
-			--prefix=/usr \
+			--prefix=/tools \
+			--host=$TMPTGT \
+			--build=$(../${srcdir}/scripts/config.guess) \
 			--disable-profile \
 			--enable-kernel=2.6.32 \
 			--enable-obsolete-rpc \
+			--with-headers=/tools/include \
+			libc_cv_forced_unwind=yes \
+			libc_cv_ctors_header=yes \
+			libc_cv_c_cleanup=yes
 	else
 		curl -k "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/locale-gen?h=packages/glibc" > ../${srcdir}/locale-gen
 		../${srcdir}/configure \
@@ -56,7 +67,10 @@ function installpkg() {
 	default
 
 	cd ../${srcdir}
-	install -D -m644 COPYING ${dest_dir}/usr/share/licenses/${name}-${version}/LICENSE
+
+	if ( $flag_stage3 ); then
+		install -D -m644 COPYING ${dest_dir}/usr/share/licenses/${name}-${version}/LICENSE
+	fi
 
 	if ( $flag_stage3 ); then
 		install -D -m755 locale-gen ${dest_dir}/usr/bin
@@ -76,6 +90,8 @@ function installpkg() {
 	if ( ! $flag_locale ); then
 		rm -rf ${dest_dir}/usr/share/i18n/locales
 	fi
+
+	rm ${dest_dir}/tools
 }
 
 function post_install() {

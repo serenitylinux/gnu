@@ -22,3 +22,4 @@ if [[ "$skip_defaults" != "true" ]]; then
 fi
 
 TMPROOT=/gnu-bootstrap
+TMPTGT=x86_64-temptools-linux-gnu
