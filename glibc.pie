@@ -1,36 +1,24 @@
 # vim: ft=sh
 name="glibc"
-iteration="20"
+iteration="10"
 version="2.19"
 desc="GNU Standard C Library"
 bdeps=(
-	'linux-headers'
-
 	'[+stage1] binutils(+dev +stage1)'
 	'[+stage1] gcc(+dev +stage1)'
-	'[+stage1] glibc(+dev +stage2)'
 
-	'[+stage1] coreutils'
-	'[+stage1] bash'
-	'[+stage1] make'
-	'[+stage1] tar'
-	'[+stage1] gawk'
-	'[+stage1] sed'
-	'[+stage1] base-files'
-	'[+stage1] grep'
-	'[+stage1] gzip'
-
-	'[+stage2] gnu-build-tools'
-	'[+stage2] tzdata'
-	'[+stage2] curl'
+	'[+stage3] gnu-build-tools'
+	'[+stage3] tzdata'
+	'[+stage3] curl'
+	'[+stage3] linux-headers'
 )
 deps=(
-	'linux-headers'
-	'[+stage2] tzdata'
-	'[+stage2] sed'
+	'[+stage3] linux-headers'
+	'[+stage3] tzdata'
+	'[+stage3] sed'
 )
 arch=('i368' 'x86_64')
-flags=('-stage1' '-stage2' '-charmaps' '-dev' '+locale')
+flags=('-stage1' '-stage3' '-charmaps' '-dev' '+locale')
 #TODO add flag deps
 
 function configure() {
@@ -70,7 +58,7 @@ function installpkg() {
 	cd ../${srcdir}
 	install -D -m644 COPYING ${dest_dir}/usr/share/licenses/${name}-${version}/LICENSE
 
-	if ( $flag_stage2 ); then
+	if ( $flag_stage3 ); then
 		install -D -m755 locale-gen ${dest_dir}/usr/bin
 		install -d -m755 ${dest_dir}/etc
 		echo 'en_US.UTF-8 UTF-8' > ${dest_dir}/etc/locale.gen

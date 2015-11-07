@@ -1,10 +1,22 @@
 # vim: ft=sh
 name="gnu-build-tools"
-iteration="11"
+iteration="10"
 version="1.0.0"
 desc="Packages required to build most gnu packages"
 bdeps=('gnu-build-tools')
-deps=('glibc(+dev +stage2)' 'gcc(+dev +stage3)' 'binutils(+dev +stage3)' 'bash' 'gawk' 'make' 'tar' 'coreutils' 'sed' 'grep' 'gzip')
+deps=(
+	'libc(+dev +glibc)'
+	'gcc(+dev +stage3)'
+	'binutils(+dev +stage3)'
+	'bash'
+	'gawk'
+	'make'
+	'tar'
+	'coreutils'
+	'sed'
+	'grep'
+	'gzip'
+)
 arch=('any')
 skip_defaults="true"
 

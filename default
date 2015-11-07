@@ -20,3 +20,5 @@ if [[ "$skip_defaults" != "true" ]]; then
 	ine_v src "http://mirror.clarkson.edu/gnu/$name/${name}-${version}.$ext"
 	ine_v srcdir "$name-$version"
 fi
+
+TMPROOT=/gnu-bootstrap

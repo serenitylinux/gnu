@@ -1,51 +1,27 @@
 # vim: ft=sh
 name="gcc"
-iteration="20"
-version="4.8.2"
+iteration="10"
+version="5.2.0"
 desc="GNU Compiler Collection"
 bdeps=(
-	#Required all:
-	'linux-headers'
-	'diffutils'
-
-	#Stages 1 and 2
 	'[+stage1] binutils(+dev +stage1)'
-	'[+stage1] gcc(+dev +stage3)'
-	'[+stage1] glibc(+dev +stage2)'
 
 	'[+stage2] binutils(+dev +stage2)'
 	'[+stage2] gcc(+dev +stage1)'
 	'[+stage2] glibc(+dev +stage1)'
-
-	'[+stage1 || +stage2] coreutils'
-	'[+stage1 || +stage2] curl'
-	'[+stage1 || +stage2] bash'
-	'[+stage1 || +stage2] make'
-	'[+stage1 || +stage2] tar'
-	'[+stage1 || +stage2] gawk'
-	'[+stage1 || +stage2] sed'
-	'[+stage1 || +stage2] base-files'
-	'[+stage1 || +stage2] xz'
-	'[+stage1 || +stage2] gzip'
-	'[+stage1 || +stage2] grep'
-
-	#curl hack
-	'[+stage1 || +stage2] libgcrypt'
-
-
 	'[+stage2] libstdc++(+stage2)'
-	'[+stage3] libstdc++'
 
 	#Stage3(final)
+	'[+stage3] linux-headers'
+	'[+stage3] diffutils'
+	'[+stage3] libstdc++'
 	'[+stage3] gmp(+dev)'
 	'[+stage3] mpfr(+dev)'
 	'[+stage3] libmpc(+dev)'
 	'[+stage3] gnu-build-tools'
-
 )
 deps=(
-	'libc'
-	'binutils'
+	'[+stage3] libc'
 	'[+stage3] gmp(?dev)'
 	'[+stage3] mpfr(?dev)'
 	'[+stage3] libmpc(?dev)'
@@ -60,8 +36,6 @@ src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
 
 function configure() {
 	lang="c,c++"
-#	tmp_target_arch=x86_64
-#	target=${tmp_target_arch}-serenity-linux-gnu
 
 	mkdir ../build
 	cd ../build
@@ -83,14 +57,31 @@ function configure() {
 		mv ../gmp-${gmp_version} ../${srcdir}/gmp
 		mv ../mpc-${mpc_version} ../${srcdir}/mpc
 		mv ../mpfr-${mpfr_version} ../${srcdir}/mpfr
+
+		for file in $(find ../${srcdir}/gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
+		do
+			cp -uv $file{,.orig}
+			sed -e "s@/lib\(64\)\?\(32\)\?/ld@/$TMPROOT/tools&@g" -e "s@/usr@/$TMPROOT/tools@g" $file.orig > $file
+			cat >> $file << EOF
+			#undef STANDARD_STARTFILE_PREFIX_1
+			#undef STANDARD_STARTFILE_PREFIX_2
+			#define STANDARD_STARTFILE_PREFIX_1 "$TMPROOT/tools/lib/"
+			#define STANDARD_STARTFILE_PREFIX_2 ""
+EOF
+			touch $file.orig
+		done
 	fi
 
 	if ( $flag_stage1 ); then
+		export PATH=$TMPROOT/tools/bin:$PATH
+
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass1.html
 		../${srcdir}/configure \
-			--prefix=/usr \
 			--with-newlib \
 			--without-headers \
+			--prefix=$TMPROOT/tools \
+			--with-local-prefix=$TMPROOT/tools \
+			--with-native-system-header-dir=$TMPROOT/tools/include \
 			--disable-nls \
 			--disable-shared \
 			--disable-multilib \
@@ -98,31 +89,25 @@ function configure() {
 			--disable-threads \
 			--disable-libatomic \
 			--disable-libgomp \
-			--disable-libitm \
 			--disable-libquadmath \
-			--disable-libsanitizer \
 			--disable-libssp \
 			--disable-libvtv \
-			--disable-libcilkrts \
-			--disable-libstdc++-v3 \
+			--disable-libstdcxx \
 			--enable-languages=c,c++
 	elif ( $flag_stage2 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass2.html
 
+		export PATH=$TMPROOT/tools/bin:$PATH
+
 		cd ../${srcdir}
-#		cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
-#			`dirname $(${target}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
 		cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
 			`dirname $(gcc -print-libgcc-file-name)`/include-fixed/limits.h
 		cd -
 
-#		export CC=$target-gcc
-#		export CXX=$target-g++
-#		export AR=$target-ar
-#		export RANLIB=$target-ranlib
-
 		../${srcdir}/configure \
-			--prefix=/usr \
+			--prefix=$TMPROOT/tools \
+			--with-local-prefix=$TMPROOT/tools \
+			--with-native-system-header-dir=$TMPROOT/tools/include \
 			--enable-languages=c,c++ \
 			--disable-libstdcxx-pch \
 			--disable-multilib \
@@ -145,9 +130,6 @@ function build() {
 }
 
 function installpkg() {
-	#default
-	#rm -rf ${dest_dir}/usr/share/gcc-4.8.2
-
 	cd ../build
 	default
 

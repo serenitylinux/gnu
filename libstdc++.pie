@@ -1,30 +1,19 @@
 # vim: ft=sh
 name="libstdc++"
-iteration="20"
+iteration="10"
 version="4.8.2"
 desc="GNU Compiler Collection's Standard C++ Library"
 bdeps=(
-	'linux-headers'
-	'diffutils'
+	'[+stage1] binutils(+dev +stage1)'
+	'[+stage1] gcc(+dev +stage1)'
+	'[+stage1] glibc(+dev +stage1)'
 
-	'[-stage2]gnu-build-tools'
-
-	'[+stage2] binutils(+dev +stage1 -stage2 -stage3)'
-	'[+stage2] gcc(+dev +stage1 -stage2 -stage3)'
-	'[+stage2] glibc(+dev +stage1 -stage2)'
-
-	'[+stage2] coreutils'
-	'[+stage2] bash'
-	'[+stage2] make'
-	'[+stage2] tar'
-	'[+stage2] gawk'
-	'[+stage2] sed'
-	'[+stage2] base-files'
-	'[+stage2] grep'
-	'[+stage2] gzip'
+	'[+stage3] linux-headers'
+	'[+stage3] diffutils'
+	'[+stage3] gnu-build-tools'
 )
-deps=('linux-headers')
-flags=('-stage2')
+deps=('[+stage3] linux-headers')
+flags=('-stage1' '+stage3')
 
 srcdir="gcc-$version"
 src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
