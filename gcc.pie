@@ -82,14 +82,6 @@ function configure() {
 	fi
 
 	if ( $flag_stage1 ); then
-		# Install the linux headers to the tool dir for glibc
-		linux_version=3.12.4
-		curl "http://mirror.clarkson.edu/linux/kernel/v3.0/linux-$linux_version.tar.gz" -o linux.tar.gz
-		tar -xf linux.tar.gz
-		cd linux-$linux_version
-		make headers_install INSTALL_HDR_PATH=${dest_dir}/tools/
-		cd ..
-
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass1.html
 		../${srcdir}/configure \
 			--prefix=/tools \
