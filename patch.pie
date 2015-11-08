@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="patch"
-iteration="2"
+iteration="3"
 version="2.7.1"
 desc="A utility to apply patch files to original sources"
-bdeps=('libc(+dev)' 'attr(+dev)')
+bdeps=('gnu-build-tools' 'attr(+dev)')
 deps=('libc' 'attr')
 flags=('-doc')
 
