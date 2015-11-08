@@ -1,0 +1,43 @@
+# vim: ft=sh
+name="bash"
+version="4.3.30"
+iteration="1"
+desc="The GNU Bourne Again shell"
+bdeps=('[+system_readline]readline(+dev)' 'gnu-build-tools')
+deps=('[+system_readline]readline' 'libc')
+flags=('+system_readline' '+readline' '+curses' '+locale' )
+
+
+function configure() {
+	readline=""
+	if $( $flag_readline ); then
+		readline="--enable-readline"
+		if ( $flag_system_readline ); then 
+			readline="$readline --with--installed-readline"
+		fi
+	fi
+
+	curses=""
+	if $( $flag_curses ); then
+		curses="--with-curses"
+	fi
+
+	./configure \
+		--prefix=/$PREFIX \
+		$curses \
+		$readline \
+		--without-bash-malloc
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+	ln -sv bash ${dest_dir}/$PREFIX/bin/sh
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/usr/share/locale
+	fi
+}
