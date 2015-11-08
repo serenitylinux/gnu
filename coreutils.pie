@@ -1,15 +1,18 @@
 # vim: ft=sh
 name="coreutils"
-iteration="4"
+iteration="5"
 version="8.21"
 desc="The basic file, shell and text manipulation utilities of the GNU operating system"
 bdeps=('gnu-build-tools' 'pam(+dev)' 'acl(+dev)' 'attr(+dev)' 'libcap(+dev)' 'libssl(+dev)')
 deps=('libc' 'pam' 'acl' 'attr' 'libcap' 'libssl')
-flags=('-doc')
+flags=('-doc' '+locale')
 ext="tar.xz"
 
 function configure() {
-	./configure --prefix=/usr --libexecdir=/usr/lib 
+	./configure \
+		--prefix=$PREFIX \
+		-libexecdir=$PREFIX/lib \
+		--enable-install-program=hostname
 }
 
 function build() {
@@ -20,11 +23,11 @@ function installpkg() {
 	default
 
 	if ( ! $flag_doc ); then
-		rm -rf ${dest_dir}/usr/share/info
-		rm -rf ${dest_dir}/usr/share/man
+		rm -rf ${dest_dir}/$PREFIX/share/info
+		rm -rf ${dest_dir}/$PREFIX/share/man
 	fi
 
 	if ( ! $flag_locale ); then
-		rm -rf ${dest_dir}/usr/share/locale
+		rm -rf ${dest_dir}/$PREFIX/share/locale
 	fi
 }
