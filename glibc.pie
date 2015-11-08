@@ -36,15 +36,6 @@ function configure() {
 		mkdir -p ${dest_dir}/$TMPROOT/tools
 		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
 
-		# Install the linux headers to the tool dir for glibc
-		linux_version=3.12.4
-		curl "http://mirror.clarkson.edu/linux/kernel/v3.0/linux-$linux_version.tar.gz" -o linux.tar.gz
-		tar -xf linux.tar.gz
-		cd linux-$linux_version
-		make headers_install INSTALL_HDR_PATH=${dest_dir}/tools/
-		cd ..
-
-
 		../${srcdir}/configure \
 			--prefix=/tools \
 			--host=$TMPTGT \
