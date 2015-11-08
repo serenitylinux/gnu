@@ -1,7 +1,7 @@
 # vim: ft=sh
 name="tar"
-iteration="3"
-version="1.27"
+iteration="1"
+version="1.28"
 desc="Utility used to store, backup, and transport files"
 bdeps=('gnu-build-tools')
 deps=('libc' 'acl' 'attr')
@@ -9,7 +9,7 @@ flags=('-doc' '+locale')
 
 
 function configure() {
-	./configure --prefix=/usr --libexecdir=/usr/lib/tar
+	default
 }
 
 function build() {
@@ -20,9 +20,10 @@ function installpkg() {
 	default
 
 	if ( ! $flag_doc ); then
-		rm -rf ${dest_dir}/usr/share/info
+		rm -rf ${dest_dir}/$PREFIX/share/info
+		rm -rf ${dest_dir}/$PREFIX/share/man
 	fi
 	if ( ! $flag_locale ); then
-		rm -rf ${dest_dir}/usr/share/locale
+		rm -rf ${dest_dir}/$PREFIX/share/locale
 	fi
 }
