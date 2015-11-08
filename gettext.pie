@@ -1,0 +1,39 @@
+# vim: ft=sh
+name="gettext"
+iteration="1"
+version="0.19.5.1"
+desc="GNU internationalization library"
+bdeps=('gnu-build-tools' 'acl(+dev)')
+deps=('libc' 'acl')
+flags=('-dev' '-doc' '+locale')
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_dev ); then
+		rm -rf ${dest_dir}/$PREFIX/include
+		rm ${dest_dir}/$PREFIX/lib/*.a
+		rm ${dest_dir}/$PREFIX/lib/*.la
+		rm -rf ${dest_dir}/$PREFIX/share/aclocal
+		rm -rf ${dest_dir}/$PREFIX/share/gettext
+	fi
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/$PREFIX/share/doc
+		rm -rf ${dest_dir}/$PREFIX/share/info
+		rm -rf ${dest_dir}/$PREFIX/share/man
+	fi
+
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/$PREFIX/share/locale
+	fi
+}
