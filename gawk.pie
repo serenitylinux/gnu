@@ -1,7 +1,7 @@
 # vim: ft=sh
 name="gawk"
-iteration="3"
-version="4.1.0"
+iteration="1"
+version="4.1.3"
 desc="GNU version of awk"
 bdeps=('gnu-build-tools' 'mpfr(+dev)' 'gmp(+dev)' 'ncurses(+dev)' 'readline(+dev)')
 deps=('libc' 'mpfr' 'gmp' 'ncurses' 'readline')
@@ -9,7 +9,7 @@ flags=('-doc' '-dev' '+locale')
 
 
 function configure() {
-	./configure --prefix=/usr --libexecdir=/usr/lib --without-libsigsegv
+	default
 }
 
 function build() {
