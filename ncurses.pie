@@ -1,0 +1,72 @@
+# vim: ft=sh
+name="ncurses"
+version="6.0"
+iteration="1"
+desc="System V Release 4.0 curses emulation library"
+bdeps=('gnu-build-tools')
+deps=('libc')
+arch=('any')
+flags=('-dev' '-doc' '-dbg' '+widec')
+
+# Inspired by
+# http://www.linuxfromscratch.org/lfs/view/stable/chapter05/ncurses.html
+# https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/ncurses
+
+function configure() {
+	sed -i s/mawk// configure
+
+	widec="--enable-widec"
+	if ( ! $flag_widec ); then
+		widec="--disable-widec"
+	fi
+
+	debug="--with-debug"
+	if ( ! $flag_debug ); then
+		debug="--disable-debug"
+	fi
+
+	./configure \
+		--prefix=$PREFIX \
+		--with-shared \
+		$debug \
+		--without-ada \
+		$widec \
+		--enable-overwrite
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	# This does not work when pkgconfig is not setup (I think)
+	if [ -d ${dest_dir}/$PREFIX/lib/pkgconfig ]; then
+		# fool packages looking to link to non-wide-character ncurses libraries
+		for lib in ncurses ncurses++ form panel menu; do
+			echo "INPUT(-l${lib}w)" > ${dest_dir}/$PREFIX/lib/lib${lib}.so
+			ln -s ${lib}w.pc ${dest_dir}/$PREFIX/lib/pkgconfig/${lib}.pc
+		done
+
+		# some packages look for -lcurses during build
+		echo "INPUT(-lncursesw)" > ${dest_dir}/$PREFIX/lib/libcursesw.so
+		ln -s libncurses.so ${dest_dir}/$PREFIX/lib/libcurses.so
+	fi
+
+	set -x
+
+	# install license, rip it from the readme
+	install -dm755 ${dest_dir}/$PREFIX/share/licenses/$pkgname
+	head -n27 README > ${dest_dir}/$PREFIX/share/licenses/${pkgname}/license.txt
+	
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}$PREFIX/share/man
+	fi
+
+	if ( ! $flag_dev ); then
+		rm ${dest_dir}/$PREFIX/lib/*.a
+		rm ${dest_dir}/$PREFIX/lib64/*.a
+		rm -rf ${dest_dir}/$PREFIX/include
+	fi
+}
