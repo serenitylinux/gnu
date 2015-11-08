@@ -1,0 +1,32 @@
+# vim: ft=sh
+name="grep"
+iteration="1"
+version="2.21"
+desc="A string search utility"
+bdeps=('gnu-build-tools')
+deps=('libc')
+flags=('-doc' '+locale')
+ext="tar.xz"
+
+#TODO pcre flags
+
+
+function configure() {
+	default
+}
+
+function build() {
+	default
+}
+
+function installpkg() {
+	default
+
+	if ( ! $flag_doc ); then
+		rm -rf ${dest_dir}/$PREFIX/share/info
+		rm -rf ${dest_dir}/$PREFIX/share/man
+	fi
+	if ( ! $flag_locale ); then
+		rm -rf ${dest_dir}/$PREFIX/share/locale
+	fi
+}
