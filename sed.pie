@@ -1,9 +1,9 @@
 # vim: ft=sh
 name="sed"
-iteration="2"
+iteration="3"
 version="4.2.2"
 desc="GNU stream editor"
-bdeps=('acl(+dev)' 'attr(+dev)' 'libc(+dev)')
+bdeps=('gnu-build-tools' 'acl(+dev)' 'attr(+dev)')
 deps=('acl' 'attr' 'libc')
 flags=('-doc' '+locale')
 
@@ -20,11 +20,11 @@ function installpkg() {
 	default
 	
 	if ( ! $flag_doc ); then
-		rm -rf ${dest_dir}/usr/share/info
-		rm -rf ${dest_dir}/usr/share/man
+		rm -rf ${dest_dir}/$PREFIX/share/info
+		rm -rf ${dest_dir}/$PREFIX/share/man
 	fi
 
 	if ( ! $flag_locale ); then
-		rm -rf ${dest_dir}/usr/share/locale
+		rm -rf ${dest_dir}/$PREFIX/share/locale
 	fi
 }
