@@ -27,11 +27,14 @@ function configure() {
 	mkdir -p ${dest_dir}/$TMPROOT/tools
 	ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
 
+	export CFLAGS="-fPIC" CXXFLAGS="-fPIC"
+
 	# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-libstdc++.html
 	../${srcdir}/libstdc++-v3/configure \
 		--host=$TMPTGT \
 		--prefix=/tools \
 		--disable-multilib \
+		--with-pic \
 		--disable-shared \
 		--disable-nls \
 		--disable-libstdcxx-threads \
