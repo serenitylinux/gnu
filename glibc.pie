@@ -1,7 +1,7 @@
 # vim: ft=sh
 name="glibc"
 iteration="10"
-version="2.19"
+version="2.22"
 desc="GNU Standard C Library"
 bdeps=(
 	'[+stage1] binutils(+dev +stage1)'
@@ -27,7 +27,7 @@ fi
 
 function configure() {
 	# needs this to build with make 4.0
-	sed -r -i 's/(3..89..)/\1 | 4.*/' ./configure
+	#sed -r -i 's/(3..89..)/\1 | 4.*/' ./configure
 
 	mkdir ../build-glibc
 	cd ../build-glibc
@@ -91,7 +91,9 @@ function installpkg() {
 		rm -rf ${dest_dir}/usr/share/i18n/locales
 	fi
 
-	rm ${dest_dir}/tools
+	if ( $flag_stage1 || $flag_stage2 ); then
+		rm ${dest_dir}/tools
+	fi
 }
 
 function post_install() {

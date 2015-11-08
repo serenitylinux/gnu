@@ -23,12 +23,14 @@ if ( $flag_stage1 || $flag_stage2 ); then
 fi
 
 function configure() {
+	if ( $flag_stage1 || $flag_stage2 ); then
+		mkdir -p ${dest_dir}/$TMPROOT/tools
+		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
+	fi
+
 	if ( $flag_stage1 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass1.html
 		# TODO remove werror perhaps?
-
-		mkdir -p ${dest_dir}/$TMPROOT/tools
-		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
 
 		./configure \
 			--prefix=/tools \
@@ -40,7 +42,10 @@ function configure() {
 	elif ( $flag_stage2 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/binutils-pass2.html
 
-		export CC=$TMPTGT-gcc AR=$TMPTGT-ar RANLIB=$TMPTGT-ranlib
+		export \
+			CC=$TMPTGT-gcc \
+			AR=$TMPTGT-ar \
+			RANLIB=$TMPTGT-ranlib
 
 		./configure \
 			--prefix=/tools \
@@ -99,8 +104,20 @@ function installpkg() {
 		rm ${dest_dir}/usr/share/locale
 	fi
 
+	if ( $flag_stage2 ); then
+		make -C ld clean
+		make -C ld LIB_PATH=/usr/lib:/lib
+		mkdir -p ${dest_dir}/tools/bin/
+		cp -v ld/ld-new ${dest_dir}/tools/bin
+	fi
 
-	rm ${dest_dir}/tools
-	ln -sv /$TMPROOT/tools ${dest_dir}/tools
+	if ( $flag_stage1 || $flag_stage2 ); then
+		rm ${dest_dir}/tools
+	fi
+
+	if ( $flag_stage1 ); then
+		ln -sv /$TMPROOT/tools ${dest_dir}/tools
+	fi
+
 }
 

@@ -34,7 +34,7 @@ flags=('-stage1' '-stage2' '+stage3' '-dev' '-doc' '+locale')
 srcdir="$name-$version"
 src=("http://mirror.clarkson.edu/gnu/gcc/gcc-$version/gcc-$version.tar.gz")
 
-if ( $flag_stage1 ); then
+if ( $flag_stage1 || $flag_stage2 ); then
 	export PATH=/tools/bin:$PATH
 fi
 
@@ -76,12 +76,12 @@ function configure() {
 			' >> $file
 			touch $file.orig
 		done
+
+		mkdir -p ${dest_dir}/$TMPROOT/tools
+		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
 	fi
 
 	if ( $flag_stage1 ); then
-		mkdir -p ${dest_dir}/$TMPROOT/tools
-		ln -sv ${dest_dir}/$TMPROOT/tools ${dest_dir}/tools
-
 		# Install the linux headers to the tool dir for glibc
 		linux_version=3.12.4
 		curl "http://mirror.clarkson.edu/linux/kernel/v3.0/linux-$linux_version.tar.gz" -o linux.tar.gz
@@ -115,11 +115,15 @@ function configure() {
 	elif ( $flag_stage2 ); then
 		# Based on http://www.linuxfromscratch.org/lfs/view/development/chapter05/gcc-pass2.html
 
-		export PATH=$TMPROOT/tools/bin:$PATH
+		export \
+			CC=$TMPTGT-gcc \
+			CXX=$TMPTGT-g++ \
+			AR=$TMPTGT-ar \
+			RANLIB=$TMPTGT-ranlib
 
 		cd ../${srcdir}
 		cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
-			`dirname $(gcc -print-libgcc-file-name)`/include-fixed/limits.h
+			`dirname $($TMPTGT-gcc -print-libgcc-file-name)`/include-fixed/limits.h
 		cd -
 
 		../${srcdir}/configure \
@@ -152,10 +156,12 @@ function installpkg() {
 	default
 
 	if ( $flag_stage2 ); then
+		mkdir -p ${dest_dir}/tools/bin
 		ln -sv gcc ${dest_dir}/tools/bin/cc
 	fi
 	if ( $flag_stage3 ); then
-		ln -sv gcc $dest_dir/usr/bin/cc #TODO meta package
+		mkdir -p ${dest_dir}/usr/bin
+		ln -sv gcc ${dest_dir}/usr/bin/cc #TODO meta package
 	fi
 
 	if ( ! $flag_dev ); then
@@ -183,5 +189,7 @@ function installpkg() {
 		rm ${dest_dir}/usr/lib64/libstdc++.so.6.0.18-gdb.py
 	fi
 
-	rm ${dest_dir}/tools
+	if ( $flag_stage1 || $flag_stage2 ); then
+		rm ${dest_dir}/tools
+	fi
 }
