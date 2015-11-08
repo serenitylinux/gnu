@@ -11,7 +11,6 @@ ext="tar.xz"
 function configure() {
 	./configure \
 		--prefix=$PREFIX \
-		-libexecdir=$PREFIX/lib \
 		--enable-install-program=hostname
 }
 
