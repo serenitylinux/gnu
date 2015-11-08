@@ -1,6 +1,6 @@
 # vim: ft=sh
 name="m4"
-iteration="3"
+iteration="4"
 version="1.4.17"
 desc="The GNU macro processor"
 bdeps=('gnu-build-tools')
@@ -20,6 +20,6 @@ function installpkg() {
 	default
 
 	if ( ! $flag_doc ); then
-		rm -rf ${dest_dir}/usr/share/
+		rm -rf ${dest_dir}/$PREFIX/share/
 	fi
 }
