@@ -1,6 +1,6 @@
 # vim: ft=sh
 name="diffutils"
-iteration="3"
+iteration="4"
 version="3.3"
 desc="Utility programs used for creating patch files"
 bdeps=('gnu-build-tools')
@@ -22,10 +22,10 @@ function installpkg() {
 	default
 
 	if ( ! $flag_doc ); then
-		rm -rf ${dest_dir}/usr/share/man
+		rm -rf ${dest_dir}/$PREFIX/share/man
 	fi
 
 	if ( ! $flag_locale ); then
-		rm -rf ${dest_dir}/usr/share/locale
+		rm -rf ${dest_dir}/$PREFIX/share/locale
 	fi
 }
